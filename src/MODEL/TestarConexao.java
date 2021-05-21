@@ -13,8 +13,6 @@ public class TestarConexao extends Conexao{
             JOptionPane.showMessageDialog(null, "Conectado com sucesso!");
         } catch (HeadlessException erro){
             JOptionPane.showMessageDialog(null, "Erro: " + erro);
-          }
-          
-        
+          } 
     }
 }
