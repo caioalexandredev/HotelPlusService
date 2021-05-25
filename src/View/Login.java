@@ -109,6 +109,9 @@ public class Login extends javax.swing.JFrame {
         jLabel_btn_cadastro.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/btn_cadastro_A.png"))); // NOI18N
         jLabel_btn_cadastro.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jLabel_btn_cadastro.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel_btn_cadastroMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 jLabel_btn_cadastroMouseEntered(evt);
             }
@@ -200,6 +203,12 @@ public class Login extends javax.swing.JFrame {
         ImageIcon ii = new ImageIcon(getClass().getResource("/assets/form_password_B.png"));
         form_password.setIcon( ii );
     }//GEN-LAST:event_txt_passwordKeyPressed
+
+    private void jLabel_btn_cadastroMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel_btn_cadastroMouseClicked
+        Cadastro cad = new Cadastro();
+        cad.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jLabel_btn_cadastroMouseClicked
 
     /**
      * @param args the command line arguments

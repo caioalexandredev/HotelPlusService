@@ -8,6 +8,15 @@ public class Endereco {
     public String bairro;
     public String cidade;
     public String estado;
+    
+    public void inserirDados(String rua, String bairro, String numero, String complemento, String cidade, String estado){
+        this.rua = rua;
+        this.bairro = bairro;
+        this.numero = Integer.parseInt(numero);
+        this.complemento = complemento;
+        this.cidade = cidade;
+        this.estado = estado;
+    }
 
     public int getId() {
         return id;

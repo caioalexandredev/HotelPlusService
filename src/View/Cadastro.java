@@ -5,11 +5,20 @@
  */
 package View;
 
+import Controller.Endereco;
+import Controller.Usuario;
+import Model.Dao_Endereco;
+import Model.Dao_Usuario;
+import auxiliares.Validacao;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.GraphicsEnvironment;
 import java.io.IOException;
+import java.text.ParseException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -48,6 +57,9 @@ public class Cadastro extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        txt_CPF = new javax.swing.JFormattedTextField();
+        txt_nascimento = new javax.swing.JFormattedTextField();
+        btn_cadastro1 = new javax.swing.JLabel();
         btn_cadastro = new javax.swing.JLabel();
         txt_comp = new javax.swing.JTextField();
         form_Comp = new javax.swing.JLabel();
@@ -61,13 +73,11 @@ public class Cadastro extends javax.swing.JFrame {
         form_Bairro = new javax.swing.JLabel();
         txt_rua = new javax.swing.JTextField();
         form_Rua = new javax.swing.JLabel();
-        txt_CPF = new javax.swing.JTextField();
         form_CPF = new javax.swing.JLabel();
-        txt_nascimento = new javax.swing.JTextField();
         form_Nascimento = new javax.swing.JLabel();
         txt_cargo = new javax.swing.JTextField();
         form_Cargo = new javax.swing.JLabel();
-        txt_celular = new javax.swing.JTextField();
+        txt_celular = new javax.swing.JFormattedTextField();
         form_Celular = new javax.swing.JLabel();
         txt_nome = new javax.swing.JTextField();
         form_Nome = new javax.swing.JLabel();
@@ -83,9 +93,53 @@ public class Cadastro extends javax.swing.JFrame {
         setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        txt_CPF.setBackground(new java.awt.Color(255, 255, 255, 0));
+        txt_CPF.setBorder(null);
+        txt_CPF.setForeground(new java.awt.Color(83, 83, 83));
+        try {
+            txt_CPF.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("###.###.###-##")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+        txt_CPF.setOpaque(false);
+        txt_CPF.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txt_CPFKeyTyped(evt);
+            }
+        });
+        getContentPane().add(txt_CPF, new org.netbeans.lib.awtextra.AbsoluteConstraints(555, 220, 180, 30));
+
+        txt_nascimento.setBackground(new java.awt.Color(255, 255, 255, 0));
+        txt_nascimento.setBorder(null);
+        txt_nascimento.setForeground(new java.awt.Color(83, 83, 83));
+        try {
+            txt_nascimento.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+        txt_nascimento.setOpaque(false);
+        txt_nascimento.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txt_nascimentoKeyTyped(evt);
+            }
+        });
+        getContentPane().add(txt_nascimento, new org.netbeans.lib.awtextra.AbsoluteConstraints(335, 220, 180, 30));
+
+        btn_cadastro1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/return.png"))); // NOI18N
+        btn_cadastro1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btn_cadastro1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btn_cadastro1MouseClicked(evt);
+            }
+        });
+        getContentPane().add(btn_cadastro1, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 13, -1, -1));
+
         btn_cadastro.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/btn_CadastroF_A.png"))); // NOI18N
         btn_cadastro.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btn_cadastro.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btn_cadastroMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 btn_cadastroMouseEntered(evt);
             }
@@ -215,44 +269,10 @@ public class Cadastro extends javax.swing.JFrame {
         form_Rua.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/form_Rua_A.png"))); // NOI18N
         getContentPane().add(form_Rua, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 300, -1, -1));
 
-        txt_CPF.setBackground(new java.awt.Color(255, 255, 255, 0));
-        txt_CPF.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
-        txt_CPF.setForeground(new java.awt.Color(83, 83, 83));
-        txt_CPF.setBorder(null);
-        txt_CPF.setOpaque(false);
-        txt_CPF.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txt_CPFActionPerformed(evt);
-            }
-        });
-        txt_CPF.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                txt_CPFKeyPressed(evt);
-            }
-        });
-        getContentPane().add(txt_CPF, new org.netbeans.lib.awtextra.AbsoluteConstraints(555, 220, 190, 30));
-
-        form_CPF.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/form_CPF_A.png"))); // NOI18N
+        form_CPF.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/form_CPF_B.png"))); // NOI18N
         getContentPane().add(form_CPF, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 200, -1, -1));
 
-        txt_nascimento.setBackground(new java.awt.Color(255, 255, 255, 0));
-        txt_nascimento.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
-        txt_nascimento.setForeground(new java.awt.Color(83, 83, 83));
-        txt_nascimento.setBorder(null);
-        txt_nascimento.setOpaque(false);
-        txt_nascimento.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txt_nascimentoActionPerformed(evt);
-            }
-        });
-        txt_nascimento.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                txt_nascimentoKeyPressed(evt);
-            }
-        });
-        getContentPane().add(txt_nascimento, new org.netbeans.lib.awtextra.AbsoluteConstraints(335, 220, 190, 30));
-
-        form_Nascimento.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/form_Nasc_A.png"))); // NOI18N
+        form_Nascimento.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/form_Nasc_B.png"))); // NOI18N
         getContentPane().add(form_Nascimento, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 200, -1, -1));
 
         txt_cargo.setBackground(new java.awt.Color(255, 255, 255, 0));
@@ -276,23 +296,17 @@ public class Cadastro extends javax.swing.JFrame {
         getContentPane().add(form_Cargo, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 200, -1, -1));
 
         txt_celular.setBackground(new java.awt.Color(255, 255, 255, 0));
-        txt_celular.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
-        txt_celular.setForeground(new java.awt.Color(83, 83, 83));
         txt_celular.setBorder(null);
+        txt_celular.setForeground(new java.awt.Color(83, 83, 83));
+        try {
+            txt_celular.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("(##) # ####-####")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
         txt_celular.setOpaque(false);
-        txt_celular.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txt_celularActionPerformed(evt);
-            }
-        });
-        txt_celular.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                txt_celularKeyPressed(evt);
-            }
-        });
-        getContentPane().add(txt_celular, new org.netbeans.lib.awtextra.AbsoluteConstraints(555, 160, 190, 30));
+        getContentPane().add(txt_celular, new org.netbeans.lib.awtextra.AbsoluteConstraints(555, 160, 180, 30));
 
-        form_Celular.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/form_Cel_A.png"))); // NOI18N
+        form_Celular.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/form_Cel_B.png"))); // NOI18N
         getContentPane().add(form_Celular, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 140, -1, -1));
 
         txt_nome.setBackground(new java.awt.Color(255, 255, 255, 0));
@@ -371,15 +385,6 @@ public class Cadastro extends javax.swing.JFrame {
         form_Nome.setIcon( ii );
     }//GEN-LAST:event_txt_nomeKeyPressed
 
-    private void txt_celularActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_celularActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txt_celularActionPerformed
-
-    private void txt_celularKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_celularKeyPressed
-        ImageIcon ii = new ImageIcon(getClass().getResource("/assets/form_Cel_B.png"));
-        form_Celular.setIcon( ii );
-    }//GEN-LAST:event_txt_celularKeyPressed
-
     private void txt_cargoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_cargoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txt_cargoActionPerformed
@@ -388,24 +393,6 @@ public class Cadastro extends javax.swing.JFrame {
         ImageIcon ii = new ImageIcon(getClass().getResource("/assets/form_Cargo_B.png"));
         form_Cargo.setIcon( ii );
     }//GEN-LAST:event_txt_cargoKeyPressed
-
-    private void txt_nascimentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_nascimentoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txt_nascimentoActionPerformed
-
-    private void txt_nascimentoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_nascimentoKeyPressed
-        ImageIcon ii = new ImageIcon(getClass().getResource("/assets/form_Nasc_B.png"));
-        form_Nascimento.setIcon( ii );
-    }//GEN-LAST:event_txt_nascimentoKeyPressed
-
-    private void txt_CPFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_CPFActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txt_CPFActionPerformed
-
-    private void txt_CPFKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_CPFKeyPressed
-        ImageIcon ii = new ImageIcon(getClass().getResource("/assets/form_CPF_B.png"));
-        form_CPF.setIcon( ii );
-    }//GEN-LAST:event_txt_CPFKeyPressed
 
     private void txt_compActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_compActionPerformed
         // TODO add your handling code here:
@@ -471,6 +458,60 @@ public class Cadastro extends javax.swing.JFrame {
         btn_cadastro.setIcon( ii );
     }//GEN-LAST:event_btn_cadastroMouseExited
 
+    private void btn_cadastro1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_cadastro1MouseClicked
+        Login lg = new Login();
+        lg.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btn_cadastro1MouseClicked
+
+    private void btn_cadastroMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_cadastroMouseClicked
+        Object[] options = { "Confirmar", "Cancelar" };
+        int opcao = JOptionPane.showOptionDialog(null, "Deseja prosseguir com o cadastro?","Confirmação", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+        System.out.println(opcao);
+        
+        if(opcao == 0){
+            
+            
+            String campos[] = {txt_rua.getText(), txt_bairro.getText(), txt_numero.getText(), txt_comp.getText(), txt_cidade.getText(), txt_estado.getText(), txt_nome.getText(), txt_email.getText(), txt_celular.getText(), txt_cargo.getText(), txt_nascimento.getText(), txt_CPF.getText()};
+            
+            if(Validacao.verificarCamposVazios(campos)){
+                Usuario cadUser = new Usuario();
+                Endereco cadEnd = new Endereco();
+                cadEnd.inserirDados(txt_rua.getText(), txt_bairro.getText(), txt_numero.getText(), txt_comp.getText(), txt_cidade.getText(), txt_estado.getText());
+                try {
+                    cadUser.inserirDados(txt_nome.getText(), txt_email.getText(), txt_celular.getText(), txt_cargo.getText(), txt_nascimento.getText(), txt_CPF.getText(), cadEnd);
+                } catch (ParseException ex) {
+                    JOptionPane.showMessageDialog(null, "Houve um erro, contate o adminstrador do sistema");
+                    Logger.getLogger(Cadastro.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                Dao_Endereco end = new Dao_Endereco();
+                if(end.Salvar(cadEnd)){
+                    Dao_Usuario user = new Dao_Usuario();
+                    if(user.Salvar(cadUser, end.IDInsercao)){
+                        JOptionPane.showMessageDialog(null, "Cadastro realizado com sucesso, O administrador fará a análise.\n Aguarde mais informações via canais de contato informados!");
+                        new Login().setVisible(true);
+                        this.dispose();
+                    }else{
+                        JOptionPane.showMessageDialog(null, "Ocorreu um erro, Contate o Administrador");
+                    }
+                }else{
+                    JOptionPane.showMessageDialog(null, "Ocorreu um erro, Contate o Administrador");
+                }
+            }else{
+                JOptionPane.showMessageDialog(null, "Preencha todos os campos!");
+            }
+            
+        }
+    }//GEN-LAST:event_btn_cadastroMouseClicked
+
+    private void txt_nascimentoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_nascimentoKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txt_nascimentoKeyTyped
+
+    private void txt_CPFKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_CPFKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txt_CPFKeyTyped
+
     /**
      * @param args the command line arguments
      */
@@ -509,6 +550,7 @@ public class Cadastro extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel btn_cadastro;
+    private javax.swing.JLabel btn_cadastro1;
     private javax.swing.JLabel form_Bairro;
     private javax.swing.JLabel form_CPF;
     private javax.swing.JLabel form_Cargo;
@@ -525,15 +567,15 @@ public class Cadastro extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel_Rodape1;
     private javax.swing.JLabel jLabel_Rodape2;
-    private javax.swing.JTextField txt_CPF;
+    private javax.swing.JFormattedTextField txt_CPF;
     private javax.swing.JTextField txt_bairro;
     private javax.swing.JTextField txt_cargo;
-    private javax.swing.JTextField txt_celular;
+    private javax.swing.JFormattedTextField txt_celular;
     private javax.swing.JTextField txt_cidade;
     private javax.swing.JTextField txt_comp;
     private javax.swing.JTextField txt_email;
     private javax.swing.JTextField txt_estado;
-    private javax.swing.JTextField txt_nascimento;
+    private javax.swing.JFormattedTextField txt_nascimento;
     private javax.swing.JTextField txt_nome;
     private javax.swing.JTextField txt_numero;
     private javax.swing.JTextField txt_rua;
