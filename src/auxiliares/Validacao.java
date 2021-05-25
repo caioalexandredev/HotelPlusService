@@ -1,5 +1,7 @@
 package auxiliares;
 
+import Model.Dao_Usuario;
+
 public class Validacao {
     public static boolean verificarCamposVazios(String campos[]){
         boolean retorno = true;
@@ -9,5 +11,9 @@ public class Validacao {
             }
         }
         return retorno;
+    }
+    
+    public static boolean verificarExistenciaEmail(String email){
+        return new Dao_Usuario().buscarUnicaEmail(email).isEmpty();
     }
 }

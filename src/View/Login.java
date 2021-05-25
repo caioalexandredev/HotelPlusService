@@ -5,11 +5,16 @@
  */
 package View;
 
+import Controller.Usuario;
+import Model.Dao_Usuario;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.GraphicsEnvironment;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -48,7 +53,7 @@ public class Login extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        txt_password = new javax.swing.JTextField();
+        txt_password = new javax.swing.JPasswordField();
         form_password = new javax.swing.JLabel();
         txt_login = new javax.swing.JTextField();
         form_user = new javax.swing.JLabel();
@@ -59,7 +64,6 @@ public class Login extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Hotel Plus Service - Login");
@@ -67,21 +71,14 @@ public class Login extends javax.swing.JFrame {
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         txt_password.setBackground(new java.awt.Color(255, 255, 255, 0));
-        txt_password.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
-        txt_password.setForeground(new java.awt.Color(83, 83, 83));
         txt_password.setBorder(null);
         txt_password.setOpaque(false);
-        txt_password.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txt_passwordActionPerformed(evt);
-            }
-        });
         txt_password.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 txt_passwordKeyPressed(evt);
             }
         });
-        getContentPane().add(txt_password, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 248, 280, 30));
+        getContentPane().add(txt_password, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 248, 250, 30));
 
         form_password.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/form_password_A.png"))); // NOI18N
         getContentPane().add(form_password, new org.netbeans.lib.awtextra.AbsoluteConstraints(475, 220, -1, -1));
@@ -91,11 +88,6 @@ public class Login extends javax.swing.JFrame {
         txt_login.setForeground(new java.awt.Color(83, 83, 83));
         txt_login.setBorder(null);
         txt_login.setOpaque(false);
-        txt_login.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txt_loginActionPerformed(evt);
-            }
-        });
         txt_login.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 txt_loginKeyPressed(evt);
@@ -124,6 +116,9 @@ public class Login extends javax.swing.JFrame {
         jLabel_btn_login.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/btn_login_A.png"))); // NOI18N
         jLabel_btn_login.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jLabel_btn_login.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel_btn_loginMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 jLabel_btn_loginMouseEntered(evt);
             }
@@ -150,14 +145,6 @@ public class Login extends javax.swing.JFrame {
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/BG_login.png"))); // NOI18N
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
-        jTextField1.setText("jTextField1");
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
-            }
-        });
-        getContentPane().add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 170, 270, 30));
-
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
@@ -182,33 +169,44 @@ public class Login extends javax.swing.JFrame {
         jLabel_btn_cadastro.setIcon( ii );
     }//GEN-LAST:event_jLabel_btn_cadastroMouseExited
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
-
-    private void txt_loginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_loginActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txt_loginActionPerformed
-
     private void txt_loginKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_loginKeyPressed
         ImageIcon ii = new ImageIcon(getClass().getResource("/assets/form_user_B.png"));
         form_user.setIcon( ii );
     }//GEN-LAST:event_txt_loginKeyPressed
-
-    private void txt_passwordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_passwordActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txt_passwordActionPerformed
-
-    private void txt_passwordKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_passwordKeyPressed
-        ImageIcon ii = new ImageIcon(getClass().getResource("/assets/form_password_B.png"));
-        form_password.setIcon( ii );
-    }//GEN-LAST:event_txt_passwordKeyPressed
 
     private void jLabel_btn_cadastroMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel_btn_cadastroMouseClicked
         Cadastro cad = new Cadastro();
         cad.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jLabel_btn_cadastroMouseClicked
+
+    private void jLabel_btn_loginMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel_btn_loginMouseClicked
+        Dao_Usuario login = new Dao_Usuario();
+        List<Usuario> listar = login.buscarUnicaEmail(txt_login.getText());
+        
+        if(listar.isEmpty()){
+            JOptionPane.showMessageDialog(null, "Usuário ou Senha Incorretos");
+        }else{
+            Usuario user = listar.get(0);
+            if(user.getSenha().equals("")){
+                JOptionPane.showMessageDialog(null, "Usuário em análise, contate o administrador do sistema");
+            }else if(txt_password.getPassword().equals(user.getSenha())){
+                Object[] options = { "Confirmar", "Cancelar" };
+                int opcao = JOptionPane.showOptionDialog(null, "Você está entrando como: \n" + user.getNome() + "\nDeseja prosseguir?","Confirmação", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+                if(opcao == 0){
+                    new TelaInicial(user).setVisible(true);
+                    this.dispose();
+                }
+            }else{
+                JOptionPane.showMessageDialog(null, "Usuário ou Senha Incorretos");
+            }
+        }
+    }//GEN-LAST:event_jLabel_btn_loginMouseClicked
+
+    private void txt_passwordKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_passwordKeyPressed
+        ImageIcon ii = new ImageIcon(getClass().getResource("/assets/form_password_B.png"));
+        form_password.setIcon( ii );
+    }//GEN-LAST:event_txt_passwordKeyPressed
 
     /**
      * @param args the command line arguments
@@ -255,8 +253,7 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel_Rodape2;
     private javax.swing.JLabel jLabel_btn_cadastro;
     private javax.swing.JLabel jLabel_btn_login;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField txt_login;
-    private javax.swing.JTextField txt_password;
+    private javax.swing.JPasswordField txt_password;
     // End of variables declaration//GEN-END:variables
 }

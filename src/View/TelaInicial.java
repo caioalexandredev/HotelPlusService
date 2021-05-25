@@ -5,6 +5,7 @@
  */
 package View;
 
+import Controller.Usuario;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.GraphicsEnvironment;
@@ -24,7 +25,7 @@ public class TelaInicial extends javax.swing.JFrame {
     Font cargo = null;
     Font desc = null;
     
-    public TelaInicial() {
+    public TelaInicial(Usuario user) {
         initComponents();
         
         try{
@@ -53,6 +54,8 @@ public class TelaInicial extends javax.swing.JFrame {
         jLabel_Nome.setFont(nome);
         jLabel_Cargo.setFont(cargo);
         jLabel_Desc.setFont(desc);
+        
+        definirDadosEmTela(user);
     }
 
     /**
@@ -112,6 +115,9 @@ public class TelaInicial extends javax.swing.JFrame {
         btn_sair.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/btn_Sair_A.png"))); // NOI18N
         btn_sair.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btn_sair.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btn_sairMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 btn_sairMouseEntered(evt);
             }
@@ -163,6 +169,11 @@ public class TelaInicial extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void definirDadosEmTela(Usuario usuario){
+        jLabel_Nome.setText(usuario.getNome());
+        jLabel_Cargo.setText("Cargo: " + usuario.getCargo());
+    }
+    
     private void btn_pontoMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_pontoMouseEntered
         ImageIcon ii = new ImageIcon(getClass().getResource("/assets/btn_Ponto_B.png"));
         btn_ponto.setIcon( ii );
@@ -203,41 +214,10 @@ public class TelaInicial extends javax.swing.JFrame {
         btn_sair.setIcon( ii );
     }//GEN-LAST:event_btn_sairMouseExited
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(TelaInicial.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(TelaInicial.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(TelaInicial.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(TelaInicial.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new TelaInicial().setVisible(true);
-            }
-        });
-    }
+    private void btn_sairMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_sairMouseClicked
+        new Login().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btn_sairMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel btn_controle;

@@ -467,14 +467,11 @@ public class Cadastro extends javax.swing.JFrame {
     private void btn_cadastroMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_cadastroMouseClicked
         Object[] options = { "Confirmar", "Cancelar" };
         int opcao = JOptionPane.showOptionDialog(null, "Deseja prosseguir com o cadastro?","Confirmação", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
-        System.out.println(opcao);
         
         if(opcao == 0){
-            
-            
             String campos[] = {txt_rua.getText(), txt_bairro.getText(), txt_numero.getText(), txt_comp.getText(), txt_cidade.getText(), txt_estado.getText(), txt_nome.getText(), txt_email.getText(), txt_celular.getText(), txt_cargo.getText(), txt_nascimento.getText(), txt_CPF.getText()};
             
-            if(Validacao.verificarCamposVazios(campos)){
+            if(Validacao.verificarCamposVazios(campos) && Validacao.verificarExistenciaEmail(txt_email.getText())){
                 Usuario cadUser = new Usuario();
                 Endereco cadEnd = new Endereco();
                 cadEnd.inserirDados(txt_rua.getText(), txt_bairro.getText(), txt_numero.getText(), txt_comp.getText(), txt_cidade.getText(), txt_estado.getText());
@@ -498,9 +495,8 @@ public class Cadastro extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(null, "Ocorreu um erro, Contate o Administrador");
                 }
             }else{
-                JOptionPane.showMessageDialog(null, "Preencha todos os campos!");
+                JOptionPane.showMessageDialog(null, "Campos Vazios ou Email já Existente!");
             }
-            
         }
     }//GEN-LAST:event_btn_cadastroMouseClicked
 
@@ -512,41 +508,6 @@ public class Cadastro extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txt_CPFKeyTyped
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Cadastro.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Cadastro.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Cadastro.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Cadastro.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Cadastro().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel btn_cadastro;

@@ -1,4 +1,5 @@
 package Controller;
+import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 public class Usuario {
@@ -53,6 +54,10 @@ public class Usuario {
 
     public java.sql.Date getNascimento() {
         return nascimento;
+    }
+
+    public void setNascimento(Date nascimento) {
+        this.nascimento = nascimento;
     }
 
     public String getCPF() {
