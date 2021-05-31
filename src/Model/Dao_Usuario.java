@@ -42,6 +42,7 @@ public class Dao_Usuario {
             pst.setInt(10, idEndereco);
             //Pegando o numero de linhas afetadas enquanto execultamos a chamada
             int affectedRows = pst.executeUpdate();
+            
             //Guardando ultimo ID Criado (Fazemos isso pois precisaremos de ID para utilizar na Inserção de Usuário (Chave Estrangeira do Endereço)
             ResultSet result = pst.getGeneratedKeys();
             if(result.next() && result != null){

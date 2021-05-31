@@ -190,7 +190,7 @@ public class Login extends javax.swing.JFrame {
             Usuario user = listar.get(0);
             if(user.getSenha().equals("")){
                 JOptionPane.showMessageDialog(null, "Usuário em análise, contate o administrador do sistema");
-            }else if(txt_password.getPassword().equals(user.getSenha())){
+            }else if(txt_password.getText().equals(user.getSenha())){
                 Object[] options = { "Confirmar", "Cancelar" };
                 int opcao = JOptionPane.showOptionDialog(null, "Você está entrando como: \n" + user.getNome() + "\nDeseja prosseguir?","Confirmação", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
                 if(opcao == 0){
