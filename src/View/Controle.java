@@ -5,11 +5,17 @@
  */
 package View;
 
+import Controller.Usuario;
+import Model.Dao_Usuario;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.GraphicsEnvironment;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -23,8 +29,9 @@ public class Controle extends javax.swing.JFrame {
     Font nome = null;
     Font cargo = null;
     Font desc = null;
+    Usuario user;
     
-    public Controle() {
+    public Controle(Usuario user) {
         initComponents();
         
         try{
@@ -55,6 +62,36 @@ public class Controle extends javax.swing.JFrame {
         jLabel_Desc.setFont(desc);
         jLabel_Titulo1.setFont(desc);
         jLabel_Titulo2.setFont(desc);
+        
+        this.user = user;
+        
+        atualizarlista();
+        definirDadosEmTela();
+    }
+    
+    private void definirDadosEmTela(){
+        jLabel_Nome.setText(this.user.getNome());
+        jLabel_Cargo.setText("Cargo: " + this.user.getCargo());
+    }
+    
+    private void atualizarlista(){
+        try {
+            DefaultTableModel model =(DefaultTableModel) jTable1.getModel();
+            model.getDataVector().clear();// limpa a tabela
+            Dao_Usuario listarc = new Dao_Usuario();
+            List<Usuario> lista_pessoa = listarc.buscarGeral();// aki é a pesquisa que popula meu list
+
+            if (!lista_pessoa.isEmpty()) {// aki verifica se a list nao esta vazia
+                for (Usuario c : lista_pessoa) {// aki ele percorre minha lista
+                    model.addRow(new Object[]{c.getId(), c.getNome(), c.getCPF(), c.getCargo(), c.getTelefone(), c.getNivel()});// adiciona na jtbale
+                }
+            }else{
+                model.setNumRows(1);
+            }
+        } 
+        catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Erro ao atualizar tabela\n" + e.getMessage(), null, JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     /**
@@ -116,15 +153,15 @@ public class Controle extends javax.swing.JFrame {
                 btn_regprodutoMouseExited(evt);
             }
         });
-        jPanel1.add(btn_regproduto, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 270, -1, -1));
+        jPanel1.add(btn_regproduto, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 420, -1, -1));
 
         jLabel_Titulo2.setForeground(new java.awt.Color(140, 140, 140));
-        jLabel_Titulo2.setText("e Gerencia Geral");
-        jPanel1.add(jLabel_Titulo2, new org.netbeans.lib.awtextra.AbsoluteConstraints(325, 70, -1, -1));
+        jLabel_Titulo2.setText("Funcionários e Gerencia");
+        jPanel1.add(jLabel_Titulo2, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 70, -1, -1));
 
         jLabel_Titulo1.setForeground(new java.awt.Color(140, 140, 140));
-        jLabel_Titulo1.setText("Tabela Controle de Funcionários");
-        jPanel1.add(jLabel_Titulo1, new org.netbeans.lib.awtextra.AbsoluteConstraints(325, 50, -1, -1));
+        jLabel_Titulo1.setText("Tabela Controle de");
+        jPanel1.add(jLabel_Titulo1, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 50, -1, -1));
 
         jLabel_Cargo.setBackground(new java.awt.Color(92, 92, 92));
         jLabel_Cargo.setForeground(new java.awt.Color(150, 150, 150));
@@ -149,6 +186,9 @@ public class Controle extends javax.swing.JFrame {
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 btn_mainMouseExited(evt);
             }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                btn_mainMousePressed(evt);
+            }
         });
         jPanel1.add(btn_main, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 50, -1, -1));
 
@@ -156,6 +196,7 @@ public class Controle extends javax.swing.JFrame {
         txt_ocupacao.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
         txt_ocupacao.setForeground(new java.awt.Color(83, 83, 83));
         txt_ocupacao.setBorder(null);
+        txt_ocupacao.setEnabled(false);
         txt_ocupacao.setOpaque(false);
         txt_ocupacao.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -174,21 +215,52 @@ public class Controle extends javax.swing.JFrame {
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "ID", "Nome", "CPF", "Celular", "Cargo", "Nivel"
             }
-        ));
-        jScrollPane1.setViewportView(jTable1);
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Integer.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false
+            };
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 180, -1, 140));
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jTable1.getTableHeader().setReorderingAllowed(false);
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable1MouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(jTable1);
+        if (jTable1.getColumnModel().getColumnCount() > 0) {
+            jTable1.getColumnModel().getColumn(0).setResizable(false);
+            jTable1.getColumnModel().getColumn(0).setPreferredWidth(5);
+            jTable1.getColumnModel().getColumn(1).setResizable(false);
+            jTable1.getColumnModel().getColumn(2).setResizable(false);
+            jTable1.getColumnModel().getColumn(3).setResizable(false);
+            jTable1.getColumnModel().getColumn(4).setResizable(false);
+            jTable1.getColumnModel().getColumn(5).setResizable(false);
+            jTable1.getColumnModel().getColumn(5).setPreferredWidth(5);
+        }
+
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 180, 750, 140));
 
         btn_novo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/Novo.png"))); // NOI18N
         btn_novo.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -204,6 +276,7 @@ public class Controle extends javax.swing.JFrame {
 
         btn_salvar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/Salvar.png"))); // NOI18N
         btn_salvar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btn_salvar.setEnabled(false);
         btn_salvar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 btn_salvarMouseEntered(evt);
@@ -240,6 +313,7 @@ public class Controle extends javax.swing.JFrame {
 
         btn_cancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/Cancelar.png"))); // NOI18N
         btn_cancelar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btn_cancelar.setEnabled(false);
         btn_cancelar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 btn_cancelarMouseEntered(evt);
@@ -335,55 +409,21 @@ public class Controle extends javax.swing.JFrame {
         btn_cancelar.setIcon( ii );
     }//GEN-LAST:event_btn_cancelarMouseExited
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Controle.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Controle.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Controle.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Controle.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
+    private void btn_mainMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_mainMousePressed
+        new TelaInicial(this.user).setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btn_mainMousePressed
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Controle().setVisible(true);
-            }
-        });
-    }
+    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+        int row = jTable1.rowAtPoint(evt.getPoint());
+        int col = jTable1.columnAtPoint(evt.getPoint());
+        if (row >= 0 && col >= 0) {
+            ImageIcon ii = new ImageIcon(getClass().getResource("/assets/form_funcionario_B.png"));
+            form_funcionario.setIcon( ii );
+            txt_ocupacao.setText(jTable1.getValueAt(row, 0).toString());
+            btn_novo.setEnabled(false);
+        }
+    }//GEN-LAST:event_jTable1MouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel btn_cancelar;

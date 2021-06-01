@@ -24,6 +24,7 @@ public class TelaInicial extends javax.swing.JFrame {
     Font nome = null;
     Font cargo = null;
     Font desc = null;
+    Usuario user;
     
     public TelaInicial(Usuario user) {
         initComponents();
@@ -56,6 +57,17 @@ public class TelaInicial extends javax.swing.JFrame {
         jLabel_Desc.setFont(desc);
         
         definirDadosEmTela(user);
+        this.user = user;
+        configurarUsuario();
+    }
+    
+    private void configurarUsuario(){
+        if(user.getNivel() == 1){
+            btn_recepcao.disable();
+        }else if(user.getNivel() == 2){
+            btn_recepcao.disable();
+            btn_controle.disable();
+        }
     }
 
     /**
@@ -160,6 +172,9 @@ public class TelaInicial extends javax.swing.JFrame {
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 btn_controleMouseExited(evt);
             }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                btn_controleMousePressed(evt);
+            }
         });
         jPanel1.add(btn_controle, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 300, -1, -1));
 
@@ -218,6 +233,13 @@ public class TelaInicial extends javax.swing.JFrame {
         new Login().setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btn_sairMouseClicked
+
+    private void btn_controleMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_controleMousePressed
+        if(user.getNivel() == 3){
+            new Controle(this.user).setVisible(true);
+            this.dispose();
+        }
+    }//GEN-LAST:event_btn_controleMousePressed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel btn_controle;

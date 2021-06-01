@@ -10,6 +10,7 @@ import Model.Dao_Usuario;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.GraphicsEnvironment;
+import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -188,7 +189,7 @@ public class Login extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Usuário ou Senha Incorretos");
         }else{
             Usuario user = listar.get(0);
-            if(user.getSenha().equals("")){
+            if(user.getSenha().equals("") && user.getNivel() == 0){
                 JOptionPane.showMessageDialog(null, "Usuário em análise, contate o administrador do sistema");
             }else if(txt_password.getText().equals(user.getSenha())){
                 Object[] options = { "Confirmar", "Cancelar" };
@@ -206,6 +207,29 @@ public class Login extends javax.swing.JFrame {
     private void txt_passwordKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_passwordKeyPressed
         ImageIcon ii = new ImageIcon(getClass().getResource("/assets/form_password_B.png"));
         form_password.setIcon( ii );
+        
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER){
+            Dao_Usuario login = new Dao_Usuario();
+            List<Usuario> listar = login.buscarUnicaEmail(txt_login.getText());
+
+            if(listar.isEmpty()){
+                JOptionPane.showMessageDialog(null, "Usuário ou Senha Incorretos");
+            }else{
+                Usuario user = listar.get(0);
+                if(user.getSenha().equals("") && user.getNivel() == 0){
+                    JOptionPane.showMessageDialog(null, "Usuário em análise, contate o administrador do sistema");
+                }else if(txt_password.getText().equals(user.getSenha())){
+                    Object[] options = { "Confirmar", "Cancelar" };
+                    int opcao = JOptionPane.showOptionDialog(null, "Você está entrando como: \n" + user.getNome() + "\nDeseja prosseguir?","Confirmação", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+                    if(opcao == 0){
+                        new TelaInicial(user).setVisible(true);
+                        this.dispose();
+                    }
+                }else{
+                    JOptionPane.showMessageDialog(null, "Usuário ou Senha Incorretos");
+                }
+            }
+        }
     }//GEN-LAST:event_txt_passwordKeyPressed
 
     /**

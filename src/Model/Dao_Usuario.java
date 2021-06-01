@@ -102,4 +102,45 @@ public class Dao_Usuario {
         }
         return listar;
     }
+    
+    //Método de Busca Geral
+    public List<Usuario> buscarGeral() {
+        
+        //Espaço para armazenar os dados
+        List<Usuario> listar = new ArrayList<>();
+        
+        // Executa a SQL e captura o resultado da consulta
+        String SQL = "SELECT * FROM usuario";
+        
+        try {
+            PreparedStatement pst = connection.prepareStatement(SQL);
+            
+            //Executa a Query e armazena o resultado
+            ResultSet rs = pst.executeQuery();
+            
+            // Cria um objeto para armazenar uma linha da consulta
+            while (rs.next()) {
+                Usuario usuario = new Usuario();
+                usuario.setId(rs.getInt("id"));
+                usuario.setNome(rs.getString("nome"));
+                usuario.setNascimento(rs.getDate("dataNasc"));
+                usuario.setCPF(rs.getString("cpf"));
+                usuario.setTelefone(rs.getString("telefone"));
+                usuario.setEmail(rs.getString("email"));
+                usuario.setCargo(rs.getString("cargo"));
+                usuario.setRemuneracao(rs.getDouble("remuneracao"));
+                usuario.setSenha(rs.getString("senha"));
+                usuario.setNivel(rs.getInt("nivel"));
+                
+                //Realizando busca do Endereço e Armazenando o Objeto retornado com o FK_Endereco fornecido pelo Usuário
+                usuario.setEndereco(new Dao_Endereco().buscarUnicaID(rs.getInt("FK_Endereco")).get(0));
+                             
+                // Armazena a linha lida em uma lista
+                listar.add(usuario);
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Erro: " + e);
+        }
+        return listar;
+    }
 }
