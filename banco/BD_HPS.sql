@@ -98,3 +98,10 @@ CREATE TABLE ponto(
     FOREIGN KEY (FK_Usuario)
     REFERENCES usuario(id)
 );
+
+INSERT INTO `quarto` (`id`, `numeroQuarto`, `tipo`, `precoDiaria`) VALUES (1, 001, 'Casal', 140.00);
+INSERT INTO `quarto` (`id`, `numeroQuarto`, `tipo`, `precoDiaria`) VALUES (2, 002, 'Casal', 140.00);
+INSERT INTO `quarto` (`id`, `numeroQuarto`, `tipo`, `precoDiaria`) VALUES (3, 003, 'Solteiro', 110.00);
+INSERT INTO `quarto` (`id`, `numeroQuarto`, `tipo`, `precoDiaria`) VALUES (4, 004, 'Solteiro', 140.00);
+INSERT INTO `quarto` (`id`, `numeroQuarto`, `tipo`, `precoDiaria`) VALUES (5, 101, 'Casal', 140.00);
+INSERT INTO `quarto` (`id`, `numeroQuarto`, `tipo`, `precoDiaria`) VALUES (6, 102, 'Triplo', 160.00);

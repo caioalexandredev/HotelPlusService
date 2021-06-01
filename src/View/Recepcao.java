@@ -5,6 +5,7 @@
  */
 package View;
 
+import Controller.Usuario;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.GraphicsEnvironment;
@@ -23,8 +24,9 @@ public class Recepcao extends javax.swing.JFrame {
     Font nome = null;
     Font cargo = null;
     Font desc = null;
+    Usuario user;
     
-    public Recepcao() {
+    public Recepcao(Usuario user) {
         initComponents();
         
         try{
@@ -53,7 +55,17 @@ public class Recepcao extends javax.swing.JFrame {
         jLabel_Nome.setFont(nome);
         jLabel_Cargo.setFont(cargo);
         jLabel_Desc.setFont(desc);
+        
+        this.user = user;
+        
+        definirDadosEmTela();
     }
+    
+    private void definirDadosEmTela(){
+        jLabel_Nome.setText(this.user.getNome());
+        jLabel_Cargo.setText("Cargo: " + this.user.getCargo());
+    }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -119,6 +131,9 @@ public class Recepcao extends javax.swing.JFrame {
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 btn_returnMouseExited(evt);
             }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                btn_returnMousePressed(evt);
+            }
         });
         jPanel1.add(btn_return, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 280, -1, -1));
 
@@ -136,6 +151,11 @@ public class Recepcao extends javax.swing.JFrame {
 
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/acesso_checkin.png"))); // NOI18N
         jLabel2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jLabel2MousePressed(evt);
+            }
+        });
         jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 100, -1, -1));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 860, 520));
@@ -154,43 +174,15 @@ public class Recepcao extends javax.swing.JFrame {
         btn_return.setIcon( ii );
     }//GEN-LAST:event_btn_returnMouseExited
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Recepcao.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Recepcao.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Recepcao.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Recepcao.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
+    private void btn_returnMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_returnMousePressed
+        new TelaInicial(user).setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btn_returnMousePressed
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Recepcao().setVisible(true);
-            }
-        });
-    }
+    private void jLabel2MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MousePressed
+        new CheckIn(user).setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jLabel2MousePressed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel btn_return;

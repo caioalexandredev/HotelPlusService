@@ -160,6 +160,9 @@ public class TelaInicial extends javax.swing.JFrame {
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 btn_recepcaoMouseExited(evt);
             }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                btn_recepcaoMousePressed(evt);
+            }
         });
         jPanel1.add(btn_recepcao, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 240, -1, -1));
 
@@ -240,6 +243,11 @@ public class TelaInicial extends javax.swing.JFrame {
             this.dispose();
         }
     }//GEN-LAST:event_btn_controleMousePressed
+
+    private void btn_recepcaoMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_recepcaoMousePressed
+        new Recepcao(user).setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btn_recepcaoMousePressed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel btn_controle;
