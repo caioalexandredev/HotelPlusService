@@ -89,3 +89,12 @@ CREATE TABLE frigobar (
   FOREIGN KEY (`FK_Ocupacao`)
   REFERENCES ocupacao(`id`)
 );
+
+CREATE TABLE ponto(
+	id INT NOT NULL AUTO_INCREMENT,
+    datahora DATETIME NOT NULL,
+	FK_Usuario INT NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (FK_Usuario)
+    REFERENCES usuario(id)
+);
