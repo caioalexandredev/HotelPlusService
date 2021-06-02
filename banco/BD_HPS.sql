@@ -58,8 +58,9 @@ CREATE TABLE cliente (
   
 CREATE TABLE ocupacao (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `check-in` DATE NOT NULL,
-  `check-out` DATE NOT NULL,
+  `check-in` DATE,
+  `check-out` DATE,
+  `reserva` DATE NOT NULL,
   `FK_Cliente` INT NOT NULL,
   `FK_Quarto` INT NOT NULL,
   PRIMARY KEY(`id`),
@@ -67,18 +68,6 @@ CREATE TABLE ocupacao (
   REFERENCES cliente(`id`),
   FOREIGN KEY (`FK_Quarto`)
   REFERENCES quarto(`id`)
-);
-  
-CREATE TABLE servicoquarto (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `FK_Quarto` INT NOT NULL,
-  `FK_Usuario` INT NOT NULL,
-  `diahora` DATETIME NULL,
-  PRIMARY KEY (`id`),
-  FOREIGN KEY (`FK_Quarto`)
-  REFERENCES quarto(`id`),
-  FOREIGN KEY (`FK_usuario`)
-  REFERENCES usuario(`id`)
 );
 
 CREATE TABLE frigobar (
@@ -99,9 +88,19 @@ CREATE TABLE ponto(
     REFERENCES usuario(id)
 );
 
-INSERT INTO `quarto` (`id`, `numeroQuarto`, `tipo`, `precoDiaria`) VALUES (1, 001, 'Casal', 140.00);
-INSERT INTO `quarto` (`id`, `numeroQuarto`, `tipo`, `precoDiaria`) VALUES (2, 002, 'Casal', 140.00);
-INSERT INTO `quarto` (`id`, `numeroQuarto`, `tipo`, `precoDiaria`) VALUES (3, 003, 'Solteiro', 110.00);
-INSERT INTO `quarto` (`id`, `numeroQuarto`, `tipo`, `precoDiaria`) VALUES (4, 004, 'Solteiro', 140.00);
-INSERT INTO `quarto` (`id`, `numeroQuarto`, `tipo`, `precoDiaria`) VALUES (5, 101, 'Casal', 140.00);
-INSERT INTO `quarto` (`id`, `numeroQuarto`, `tipo`, `precoDiaria`) VALUES (6, 102, 'Triplo', 160.00);
+-- Endereço para Usuários Padrões
+INSERT INTO `endereco` (`id`, `rua`, `numero`, `complemento`, `bairro`, `cidade`, `estado`) VALUES ('1', 'Rua Padrão', '0', 'Padrão', 'Padrão', 'Padrão', 'Padrão');
+
+-- Usuários Adminstradores
+INSERT INTO `usuario` (`id`, `nome`, `dataNasc`, `cpf`, `telefone`, `email`, `cargo`, `remuneracao`, `senha`, `nivel`, `FK_Endereco`) VALUES (NULL, 'Caio Alexandre de Sousa Ramos', '2000-07-16', '592.760.500-19', '(63) 9 9110-6619', 'caio.ramos@estudante.ifto.edu.br', 'Administrador', '6000', '123', '3', 1);
+INSERT INTO `usuario` (`id`, `nome`, `dataNasc`, `cpf`, `telefone`, `email`, `cargo`, `remuneracao`, `senha`, `nivel`, `FK_Endereco`) VALUES (NULL, 'Lucas Eduardo Sampaio', '2000-07-16', '592.760.500-19', ' (63) 9 9231-9709', 'lucas.andrade5@estudante.ifto.edu.br', 'Administrador', '6000', '123', '3', 1);
+
+-- Quartos
+INSERT INTO `quarto` (`id`, `numeroQuarto`, `tipo`, `precoDiaria`) VALUES (1, 101, 'Casal', 140.00);
+INSERT INTO `quarto` (`id`, `numeroQuarto`, `tipo`, `precoDiaria`) VALUES (2, 102, 'Casal', 140.00);
+INSERT INTO `quarto` (`id`, `numeroQuarto`, `tipo`, `precoDiaria`) VALUES (3, 103, 'Solteiro', 110.00);
+INSERT INTO `quarto` (`id`, `numeroQuarto`, `tipo`, `precoDiaria`) VALUES (4, 104, 'Solteiro', 140.00);
+INSERT INTO `quarto` (`id`, `numeroQuarto`, `tipo`, `precoDiaria`) VALUES (5, 201, 'Casal', 140.00);
+INSERT INTO `quarto` (`id`, `numeroQuarto`, `tipo`, `precoDiaria`) VALUES (6, 202, 'Triplo', 160.00);
+INSERT INTO `quarto` (`id`, `numeroQuarto`, `tipo`, `precoDiaria`) VALUES (7, 203, 'Triplo', 160.00);
+INSERT INTO `quarto` (`id`, `numeroQuarto`, `tipo`, `precoDiaria`) VALUES (8, 204, 'Triplo', 160.00);

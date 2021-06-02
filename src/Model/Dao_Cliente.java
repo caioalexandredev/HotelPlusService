@@ -1,6 +1,7 @@
 
 package Model;
 import Controller.Cliente;
+import Controller.Endereco;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.util.ArrayList;
@@ -19,9 +20,9 @@ public class Dao_Cliente extends Conexao {
     }
     
     //Método para inserir na tabela Cliente
-    public boolean Salvar(Cliente cliente){
+    public boolean Salvar(Cliente cliente, int idEndereco){
         //string sql
-        String sql = "INSERT INTO cliente (nome, dataNasc, cpf, telefone, email) values (?,?,?,?,?)";
+        String sql = "INSERT INTO cliente (nome, dataNasc, cpf, telefone, email, FK_Endereco) values (?,?,?,?,?,?)";
         
         PreparedStatement pst;
         
@@ -30,9 +31,13 @@ public class Dao_Cliente extends Conexao {
             
             pst.setString(1, cliente.getNome());
             pst.setDate(2, cliente.getDataNasc());
-            pst.setInt(3, cliente.getCpf());
-            pst.setInt(4, cliente.getTelefone());
+            pst.setString(3, cliente.getCpf());
+            pst.setString(4, cliente.getTelefone());
             pst.setString(5, cliente.getEmail());
+            pst.setInt(6, idEndereco);
+            
+            pst.executeUpdate();
+            
             return true;
 
         } catch (Exception ex) {
@@ -59,6 +64,35 @@ public class Dao_Cliente extends Conexao {
             while(rs.next()){
                 Cliente cliente = new Cliente();
                 cliente.setId(rs.getInt("id"));
+                lista.add(cliente);
+            }
+        } catch (Exception ex){
+            JOptionPane.showMessageDialog(null, "Erro interno: " + ex);
+          }
+        return lista;
+    }
+    
+    public List<Cliente> buscarClienteGeral(){
+    
+        String sql = "SELECT * FROM cliente";
+        
+        PreparedStatement pst;
+        
+        List<Cliente> lista = new ArrayList<>();
+        
+        try{
+            pst = connection.prepareStatement(sql);
+            
+            ResultSet rs = pst.executeQuery();
+            
+            while(rs.next()){
+                Cliente cliente = new Cliente();
+                cliente.setId(rs.getInt("id"));
+                cliente.setNome(rs.getString("nome"));                
+                cliente.setEmail(rs.getString("email"));                
+                cliente.setCpf(rs.getString("cpf"));                
+                cliente.setDataNasc(rs.getDate("dataNasc"));                
+                cliente.setTelefone(rs.getString("telefone"));                
                 lista.add(cliente);
             }
         } catch (Exception ex){

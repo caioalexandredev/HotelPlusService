@@ -30,6 +30,7 @@ public class CheckIn extends javax.swing.JFrame {
     Font cargo = null;
     Font desc = null;
     Usuario user;
+    String IDQuarto;
     
     public CheckIn(Usuario user) {
         initComponents();
@@ -105,6 +106,7 @@ public class CheckIn extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jLabel2 = new javax.swing.JLabel();
         jLabel_Rodape2 = new javax.swing.JLabel();
         jLabel_Rodape1 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
@@ -129,6 +131,12 @@ public class CheckIn extends javax.swing.JFrame {
         setTitle("Hotel Plus Service - Check-In");
         setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel2.setBackground(new java.awt.Color(74, 0, 224));
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(74, 0, 224));
+        jLabel2.setText("de Saída do Hóspede");
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(508, 399, -1, -1));
 
         jLabel_Rodape2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel_Rodape2.setText("de Análise e Desenvolvimento de Sistemas peos Discentes Caio Alexandre de Sousa Ramos e Lucas Eduardo Sampaio Andrade.");
@@ -157,12 +165,12 @@ public class CheckIn extends javax.swing.JFrame {
         jPanel1.add(btn_registro, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 417, -1, -1));
 
         jLabel_Titulo2.setForeground(new java.awt.Color(140, 140, 140));
-        jLabel_Titulo2.setText("no Quarto de Hotel");
-        jPanel1.add(jLabel_Titulo2, new org.netbeans.lib.awtextra.AbsoluteConstraints(325, 70, -1, -1));
+        jLabel_Titulo2.setText("Entrada no Quarto");
+        jPanel1.add(jLabel_Titulo2, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 70, -1, -1));
 
         jLabel_Titulo1.setForeground(new java.awt.Color(140, 140, 140));
-        jLabel_Titulo1.setText("Tabela de Registro de Entrada");
-        jPanel1.add(jLabel_Titulo1, new org.netbeans.lib.awtextra.AbsoluteConstraints(325, 50, -1, -1));
+        jLabel_Titulo1.setText("Tabela de Registro de");
+        jPanel1.add(jLabel_Titulo1, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 50, -1, -1));
 
         jLabel_Cargo.setBackground(new java.awt.Color(92, 92, 92));
         jLabel_Cargo.setForeground(new java.awt.Color(150, 150, 150));
@@ -197,7 +205,6 @@ public class CheckIn extends javax.swing.JFrame {
         txt_data.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
         txt_data.setForeground(new java.awt.Color(83, 83, 83));
         txt_data.setBorder(null);
-        txt_data.setOpaque(false);
         txt_data.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txt_dataActionPerformed(evt);
@@ -213,11 +220,11 @@ public class CheckIn extends javax.swing.JFrame {
         form_data.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/form_data_A.png"))); // NOI18N
         jPanel1.add(form_data, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 400, -1, -1));
 
+        txt_quartos.setEditable(false);
         txt_quartos.setBackground(new java.awt.Color(255, 255, 255, 0));
         txt_quartos.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
         txt_quartos.setForeground(new java.awt.Color(83, 83, 83));
         txt_quartos.setBorder(null);
-        txt_quartos.setOpaque(false);
         txt_quartos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txt_quartosActionPerformed(evt);
@@ -233,11 +240,16 @@ public class CheckIn extends javax.swing.JFrame {
         form_quarto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/form_quartos_A.png"))); // NOI18N
         jPanel1.add(form_quarto, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 400, -1, -1));
 
+        txt_cliente.setEditable(false);
         txt_cliente.setBackground(new java.awt.Color(255, 255, 255, 0));
         txt_cliente.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
         txt_cliente.setForeground(new java.awt.Color(83, 83, 83));
         txt_cliente.setBorder(null);
-        txt_cliente.setOpaque(false);
+        txt_cliente.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                txt_clienteMouseClicked(evt);
+            }
+        });
         txt_cliente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txt_clienteActionPerformed(evt);
@@ -280,6 +292,11 @@ public class CheckIn extends javax.swing.JFrame {
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
+            }
+        });
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable1MouseClicked(evt);
             }
         });
         jScrollPane1.setViewportView(jTable1);
@@ -351,6 +368,29 @@ public class CheckIn extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btn_mainMousePressed
 
+    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+        int row = jTable1.rowAtPoint(evt.getPoint());
+        int col = jTable1.columnAtPoint(evt.getPoint());
+        if (row >= 0 && col >= 0 && evt.getClickCount() == 2) {
+            ImageIcon ii = new ImageIcon(getClass().getResource("/assets/form_quartos_B.png"));
+            form_quarto.setIcon( ii );
+            this.IDQuarto = jTable1.getValueAt(row, 0).toString();
+            txt_quartos.setText(jTable1.getValueAt(row, 1).toString());
+        }
+    }//GEN-LAST:event_jTable1MouseClicked
+
+    private void txt_clienteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txt_clienteMouseClicked
+        SelecaoCliente modal = new SelecaoCliente();
+        modal.setModal(true);
+        modal.setVisible(true);
+        modal.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        ImageIcon ii = new ImageIcon(getClass().getResource("/assets/form_cliente_B.png"));
+        form_cliente.setIcon( ii );
+        this.IDQuarto = modal.IDCliente;
+        txt_cliente.setText(modal.NomeCliente);
+        modal.dispose();
+    }//GEN-LAST:event_txt_clienteMouseClicked
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel btn_main;
     private javax.swing.JLabel btn_registro;
@@ -358,6 +398,7 @@ public class CheckIn extends javax.swing.JFrame {
     private javax.swing.JLabel form_data;
     private javax.swing.JLabel form_quarto;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel_Cargo;
     private javax.swing.JLabel jLabel_Desc;
     private javax.swing.JLabel jLabel_Nome;

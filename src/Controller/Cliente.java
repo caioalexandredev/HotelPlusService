@@ -10,17 +10,17 @@ public class Cliente {
     private int id;
     private String nome;
     private java.sql.Date dataNasc;
-    private int cpf;
-    private int telefone;
+    private String cpf;
+    private String telefone;
     private String email;
+    private Endereco endereco;
     
-    public void inserirDadosCliente(int id, String nome, String dataNasc, int cpf, int telefone, String email) throws ParseException{
-        
-        this.id = id;
+    public void inserirDadosCliente(String nome, String email, String telefone, String dataNasc, String cpf, Endereco end) throws ParseException{
         this.nome = nome;
         this.cpf = cpf;
         this.telefone = telefone;
         this.email = email;
+        this.endereco = end;
         
         //Convertendo Data para Formato Aceito
         SimpleDateFormat sdf;
@@ -54,20 +54,28 @@ public class Cliente {
         this.dataNasc = dataNasc;
     }
 
-    public int getCpf() {
+    public String getCpf() {
         return cpf;
     }
 
-    public void setCpf(int cpf) {
+    public void setCpf(String cpf) {
         this.cpf = cpf;
     }
 
-    public int getTelefone() {
+    public String getTelefone() {
         return telefone;
     }
 
-    public void setTelefone(int telefone) {
+    public void setTelefone(String telefone) {
         this.telefone = telefone;
+    }
+
+    public Endereco getEndereco() {
+        return endereco;
+    }
+
+    public void setEndereco(Endereco endereco) {
+        this.endereco = endereco;
     }
 
     public String getEmail() {
