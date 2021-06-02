@@ -21,7 +21,7 @@ public class Dao_Produtos extends Conexao{
     //Método de Inserção na tabela de Produto
     public boolean Salvar(Produtos produto){
         //Primeiramente criamos um SQL
-        String sql = "INSERT INTO (nome, preco) VALUES(?,?)";
+        String sql = "INSERT INTO  produtos (nome, preco) VALUES(?,?)";
         //Instaciamos o objeto que trabalha com o banco
         PreparedStatement pst;
         try {
