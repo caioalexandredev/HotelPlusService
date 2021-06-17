@@ -7,11 +7,15 @@ package View;
 
 import Controller.Quarto;
 import Controller.Usuario;
+import Model.Dao_Ocupacao;
 import Model.Dao_Quarto;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.GraphicsEnvironment;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
@@ -31,6 +35,7 @@ public class CheckIn extends javax.swing.JFrame {
     Font desc = null;
     Usuario user;
     String IDQuarto;
+    String IDCliente;
     
     public CheckIn(Usuario user) {
         initComponents();
@@ -111,6 +116,7 @@ public class CheckIn extends javax.swing.JFrame {
         jLabel_Rodape1 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
+        txt_data = new javax.swing.JFormattedTextField();
         btn_registro = new javax.swing.JLabel();
         jLabel_Titulo2 = new javax.swing.JLabel();
         jLabel_Titulo1 = new javax.swing.JLabel();
@@ -118,7 +124,6 @@ public class CheckIn extends javax.swing.JFrame {
         jLabel_Nome = new javax.swing.JLabel();
         jLabel_Desc = new javax.swing.JLabel();
         btn_main = new javax.swing.JLabel();
-        txt_data = new javax.swing.JTextField();
         form_data = new javax.swing.JLabel();
         txt_quartos = new javax.swing.JTextField();
         form_quarto = new javax.swing.JLabel();
@@ -151,6 +156,21 @@ public class CheckIn extends javax.swing.JFrame {
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        txt_data.setBackground(new java.awt.Color(255, 255, 255, 0));
+        txt_data.setBorder(null);
+        txt_data.setForeground(new java.awt.Color(83, 83, 83));
+        try {
+            txt_data.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+        txt_data.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txt_dataKeyTyped(evt);
+            }
+        });
+        jPanel1.add(txt_data, new org.netbeans.lib.awtextra.AbsoluteConstraints(495, 420, 180, 30));
 
         btn_registro.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/btn_registro_A.png"))); // NOI18N
         btn_registro.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -201,23 +221,7 @@ public class CheckIn extends javax.swing.JFrame {
         });
         jPanel1.add(btn_main, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 50, -1, -1));
 
-        txt_data.setBackground(new java.awt.Color(255, 255, 255, 0));
-        txt_data.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
-        txt_data.setForeground(new java.awt.Color(83, 83, 83));
-        txt_data.setBorder(null);
-        txt_data.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txt_dataActionPerformed(evt);
-            }
-        });
-        txt_data.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                txt_dataKeyPressed(evt);
-            }
-        });
-        jPanel1.add(txt_data, new org.netbeans.lib.awtextra.AbsoluteConstraints(495, 420, 180, 30));
-
-        form_data.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/form_data_A.png"))); // NOI18N
+        form_data.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/form_data_B.png"))); // NOI18N
         jPanel1.add(form_data, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 400, -1, -1));
 
         txt_quartos.setEditable(false);
@@ -344,15 +348,6 @@ public class CheckIn extends javax.swing.JFrame {
         form_quarto.setIcon( ii );
     }//GEN-LAST:event_txt_quartosKeyPressed
 
-    private void txt_dataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_dataActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txt_dataActionPerformed
-
-    private void txt_dataKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_dataKeyPressed
-        ImageIcon ii = new ImageIcon(getClass().getResource("/assets/form_data_B.png"));
-        form_data.setIcon( ii );
-    }//GEN-LAST:event_txt_dataKeyPressed
-
     private void btn_registroMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_registroMouseEntered
         ImageIcon ii = new ImageIcon(getClass().getResource("/assets/btn_registro_B.png"));
         btn_registro.setIcon( ii );
@@ -386,10 +381,33 @@ public class CheckIn extends javax.swing.JFrame {
         modal.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         ImageIcon ii = new ImageIcon(getClass().getResource("/assets/form_cliente_B.png"));
         form_cliente.setIcon( ii );
-        this.IDQuarto = modal.IDCliente;
+        this.IDCliente = modal.IDCliente;
         txt_cliente.setText(modal.NomeCliente);
         modal.dispose();
+        
+        if(txt_cliente.getText().equals("")){
+            JOptionPane.showMessageDialog(null, "Nenhum Cliente Selecionado, Por Favor Selecione");
+            ImageIcon iii = new ImageIcon(getClass().getResource("/assets/form_cliente_A.png"));
+            form_cliente.setIcon( iii );
+        }else{
+            //Convertendo Data para Formato Aceito
+            java.sql.Date data = new java.sql.Date(Calendar.getInstance().getTime().getTime());
+            if(new Dao_Ocupacao().verificarReserva(Integer.parseInt(this.IDCliente), data)){
+                Object[] options = { "Confirmar", "Cancelar" };
+                int opcao = JOptionPane.showOptionDialog(null, "O Cliente " + txt_cliente.getText() + " tem uma reserva marcada iniciando hoje, deseja apenas comfirmar?","Confirmação", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+                if(opcao == 0){
+                    //AQUI ATUALIZAR A VARIAVEL CHECK PARA VERDADEIRO
+                    JOptionPane.showMessageDialog(null, "Check-in Efetuado! Retornando a Recepção!");
+                    new Recepcao(this.user).setVisible(true);
+                    this.dispose();
+                }
+            }
+        }
     }//GEN-LAST:event_txt_clienteMouseClicked
+
+    private void txt_dataKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_dataKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txt_dataKeyTyped
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel btn_main;
@@ -410,7 +428,7 @@ public class CheckIn extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.JTextField txt_cliente;
-    private javax.swing.JTextField txt_data;
+    private javax.swing.JFormattedTextField txt_data;
     private javax.swing.JTextField txt_quartos;
     // End of variables declaration//GEN-END:variables
 }

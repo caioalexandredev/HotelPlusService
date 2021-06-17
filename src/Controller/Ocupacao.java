@@ -3,12 +3,21 @@ package Controller;
 
 
 public class Ocupacao {
+    private int id;
     private String checkIn;
     private String checkOut;
     private String reserva;
     private int FK_Cliente;
     private int FK_Quarto;
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+    
     public String getCheckIn() {
         return checkIn;
     }

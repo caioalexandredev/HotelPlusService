@@ -58,9 +58,10 @@ CREATE TABLE cliente (
   
 CREATE TABLE ocupacao (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `check-in` DATE,
+  `check-in` DATE NOT NULL,
   `check-out` DATE,
   `reserva` DATE NOT NULL,
+  `check` BOOLEAN NOT NULL,
   `FK_Cliente` INT NOT NULL,
   `FK_Quarto` INT NOT NULL,
   PRIMARY KEY(`id`),

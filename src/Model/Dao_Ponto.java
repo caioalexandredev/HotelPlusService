@@ -17,7 +17,7 @@ public class Dao_Ponto extends Conexao {
     
     public boolean Salvar(Ponto ponto){
 
-        String sql = "INSERT INTO ponto (FK_Usuario, datahora) VALUES(?,?)";
+        String sql = "INSERT INTO ponto (FK_Usuario, datahora) VALUES(?,now())";
 
         PreparedStatement pst;
         try {
@@ -25,7 +25,6 @@ public class Dao_Ponto extends Conexao {
             pst = connection.prepareStatement(sql);
    
             pst.setInt(1, ponto.getFK_Usuario());
-            pst.setString(2, ponto.getDatahora());//FALTA VERIFICAR FORMATAÇÃO DO BD PRA DATAHORA E CONFERIR SE É STRING
 
             pst.executeUpdate();
 

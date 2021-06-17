@@ -94,6 +94,7 @@ public class SelecaoCliente extends javax.swing.JDialog {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         btn_registro = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Hotel Plus Service - Check-In");
@@ -105,7 +106,7 @@ public class SelecaoCliente extends javax.swing.JDialog {
 
         jLabel_Titulo1.setForeground(new java.awt.Color(140, 140, 140));
         jLabel_Titulo1.setText("Selecione o Hóspede");
-        jPanel1.add(jLabel_Titulo1, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 50, -1, -1));
+        jPanel1.add(jLabel_Titulo1, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 30, -1, -1));
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -150,7 +151,7 @@ public class SelecaoCliente extends javax.swing.JDialog {
             jTable1.getColumnModel().getColumn(3).setResizable(false);
         }
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 90, -1, 240));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 70, -1, 240));
 
         btn_registro.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/btn_registro_A.png"))); // NOI18N
         btn_registro.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -165,7 +166,13 @@ public class SelecaoCliente extends javax.swing.JDialog {
                 btn_registroMousePressed(evt);
             }
         });
-        jPanel1.add(btn_registro, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 340, -1, -1));
+        jPanel1.add(btn_registro, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 320, -1, -1));
+
+        jLabel2.setBackground(new java.awt.Color(74, 0, 224));
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(74, 0, 224));
+        jLabel2.setText("De um duplo clique no cliente desejado ou faça o registro do mesmo");
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 370, -1, -1));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 680, 420));
 
@@ -202,6 +209,7 @@ public class SelecaoCliente extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel btn_registro;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel_Titulo1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;

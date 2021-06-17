@@ -5,12 +5,22 @@
  */
 package View;
 
+import Controller.Ponto;
 import Controller.Usuario;
+import Model.Dao_Ponto;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.GraphicsEnvironment;
 import java.io.IOException;
+import java.text.DateFormatSymbols;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.Locale;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -64,8 +74,8 @@ public class TelaInicial extends javax.swing.JFrame {
     private void configurarUsuario(){
         if(user.getNivel() == 1){
             btn_recepcao.disable();
+            btn_controle.disable();
         }else if(user.getNivel() == 2){
-            btn_recepcao.disable();
             btn_controle.disable();
         }
     }
@@ -148,6 +158,9 @@ public class TelaInicial extends javax.swing.JFrame {
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 btn_pontoMouseExited(evt);
             }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                btn_pontoMousePressed(evt);
+            }
         });
         jPanel1.add(btn_ponto, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 180, -1, -1));
 
@@ -187,6 +200,10 @@ public class TelaInicial extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    public String weekDay(Calendar cal) { 
+        return new DateFormatSymbols().getWeekdays()[cal.get(Calendar.DAY_OF_WEEK)]; 
+    }
+    
     private void definirDadosEmTela(Usuario usuario){
         jLabel_Nome.setText(usuario.getNome());
         jLabel_Cargo.setText("Cargo: " + usuario.getCargo());
@@ -248,6 +265,26 @@ public class TelaInicial extends javax.swing.JFrame {
         new Recepcao(user).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btn_recepcaoMousePressed
+
+    private void btn_pontoMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_pontoMousePressed
+        
+        Date d = new Date(); Calendar c = new GregorianCalendar(); c.setTime(d);
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+        Date hora = Calendar.getInstance().getTime(); // Ou qualquer outra forma que tem
+        String dataFormatada = sdf.format(hora);
+        
+        Object[] options = { "Confirmar", "Cancelar" };
+        int opcao = JOptionPane.showOptionDialog(null, "Comfirmar Ponto Eletrônico de "+ weekDay(c) + " as " + dataFormatada,"Confirmação", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+        
+        if(opcao == 0){
+            Ponto ponto = new Ponto();
+            ponto.setFK_Usuario(this.user.getId());
+            new Dao_Ponto().Salvar(ponto);
+            JOptionPane.showMessageDialog(null, "Ponto Registrado: " + weekDay(c) + " as " + dataFormatada + "\nPara o Funcionário: " + user.getNome());
+            new Login().setVisible(true);
+            this.dispose();
+        }
+    }//GEN-LAST:event_btn_pontoMousePressed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel btn_controle;

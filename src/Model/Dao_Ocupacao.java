@@ -2,8 +2,12 @@
 package Model;
 
 import Controller.Ocupacao;
+import Controller.Produtos;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JOptionPane;
 
@@ -66,5 +70,33 @@ public class Dao_Ocupacao extends Conexao {
         }
     }
     
+    //Verificar se Reserva Existe no Dia e com o Cliente
+    public boolean verificarReserva(int id, java.sql.Date date){
+        String sql = "SELECT * FROM ocupacao WHERE FK_Cliente = ? AND `check-in` = ? AND `check` = ?";
+        PreparedStatement pst;
+        
+        //Cria a lista de retorno
+        List<Ocupacao> listar = new ArrayList<>();
+        
+        try {
+            pst = connection.prepareStatement(sql);
+            pst.setInt(1, id);
+            pst.setDate(2, date);
+            pst.setBoolean(3, false);
+            
+            //Executa a Query e armazena o resultado
+            ResultSet rs = pst.executeQuery();
+            
+            //Vamos chamar um resultado por vez dentro de um WHILE
+            while(rs.next()){
+                Ocupacao ocuapcao = new Ocupacao();
+                ocuapcao.setId(rs.getInt("id"));
+                listar.add(ocuapcao);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Erro interno: " + e);
+        }
+        return !listar.isEmpty();
+    }
     
 }
