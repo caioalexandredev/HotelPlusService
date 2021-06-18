@@ -229,6 +229,11 @@ public class CheckIn extends javax.swing.JFrame {
         txt_quartos.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
         txt_quartos.setForeground(new java.awt.Color(83, 83, 83));
         txt_quartos.setBorder(null);
+        txt_quartos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                txt_quartosMouseClicked(evt);
+            }
+        });
         txt_quartos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txt_quartosActionPerformed(evt);
@@ -392,11 +397,12 @@ public class CheckIn extends javax.swing.JFrame {
         }else{
             //Convertendo Data para Formato Aceito
             java.sql.Date data = new java.sql.Date(Calendar.getInstance().getTime().getTime());
-            if(new Dao_Ocupacao().verificarReserva(Integer.parseInt(this.IDCliente), data)){
+            Dao_Ocupacao ocupacaov = new Dao_Ocupacao();
+            if(ocupacaov.verificarReserva(Integer.parseInt(this.IDCliente), data)){
                 Object[] options = { "Confirmar", "Cancelar" };
                 int opcao = JOptionPane.showOptionDialog(null, "O Cliente " + txt_cliente.getText() + " tem uma reserva marcada iniciando hoje, deseja apenas comfirmar?","Confirmação", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
                 if(opcao == 0){
-                    //AQUI ATUALIZAR A VARIAVEL CHECK PARA VERDADEIRO
+                    ocupacaov.confirmarReserva(ocupacaov.idOcupacao);
                     JOptionPane.showMessageDialog(null, "Check-in Efetuado! Retornando a Recepção!");
                     new Recepcao(this.user).setVisible(true);
                     this.dispose();
@@ -408,6 +414,10 @@ public class CheckIn extends javax.swing.JFrame {
     private void txt_dataKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_dataKeyTyped
         // TODO add your handling code here:
     }//GEN-LAST:event_txt_dataKeyTyped
+
+    private void txt_quartosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txt_quartosMouseClicked
+        JOptionPane.showMessageDialog(null, "Para selecionar um quarto, de um duplo clique no quato disponivel na tabela acima!");
+    }//GEN-LAST:event_txt_quartosMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel btn_main;

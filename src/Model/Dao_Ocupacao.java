@@ -15,6 +15,7 @@ import javax.swing.JOptionPane;
 public class Dao_Ocupacao extends Conexao {
     
     private final Connection connection;
+    public int idOcupacao;
     
     public Dao_Ocupacao(){
         this.connection = new Conexao().getConnection();
@@ -92,11 +93,28 @@ public class Dao_Ocupacao extends Conexao {
                 Ocupacao ocuapcao = new Ocupacao();
                 ocuapcao.setId(rs.getInt("id"));
                 listar.add(ocuapcao);
+                this.idOcupacao = rs.getInt("id");
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Erro interno: " + e);
         }
         return !listar.isEmpty();
+    }
+    
+    //Verificar se Reserva Existe no Dia e com o Cliente
+    public boolean confirmarReserva(int id){
+        String sql = "UPDATE `ocupacao` SET `check` = '1' WHERE `id` = ?;";
+        PreparedStatement pst;
+        
+        try {
+            pst = connection.prepareStatement(sql);
+            pst.setInt(1, id);
+            pst.executeUpdate();
+            
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Erro interno: " + e);
+        }
+        return true;
     }
     
 }
