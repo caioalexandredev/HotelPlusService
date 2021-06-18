@@ -74,5 +74,31 @@ public class Dao_Quarto extends Conexao{
         }
         return listar;
     }
+    
+    //VEREFICAR DISPONIBILIDADE DO QUARTO NO DIA
+    public List<Quarto> buscarDisponivelDia(java.sql.Date data) {
+        
+        List<Quarto> listar = new ArrayList<>();
+        
+        String SQL = "SELECT * FROM quarto";
+        try {
+            PreparedStatement pst = connection.prepareStatement(SQL);
+            ResultSet rs = pst.executeQuery();
+            
+            while (rs.next()) {
+                Quarto quarto = new Quarto();
+                
+                quarto.setId(rs.getInt("id"));
+                quarto.setNumeroQuarto(rs.getInt("numeroQuarto"));
+                quarto.setTipo(rs.getString("tipo"));
+                quarto.setPrecoDiaria(rs.getDouble("precoDiaria"));
+
+                listar.add(quarto);
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Erro: " + e);
+        }
+        return listar;
+    }
 }
 
