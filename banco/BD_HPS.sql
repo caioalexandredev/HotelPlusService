@@ -105,3 +105,6 @@ INSERT INTO `quarto` (`id`, `numeroQuarto`, `tipo`, `precoDiaria`) VALUES (5, 20
 INSERT INTO `quarto` (`id`, `numeroQuarto`, `tipo`, `precoDiaria`) VALUES (6, 202, 'Triplo', 160.00);
 INSERT INTO `quarto` (`id`, `numeroQuarto`, `tipo`, `precoDiaria`) VALUES (7, 203, 'Triplo', 160.00);
 INSERT INTO `quarto` (`id`, `numeroQuarto`, `tipo`, `precoDiaria`) VALUES (8, 204, 'Triplo', 160.00);
+
+--CLIENTES PADRÔES
+INSERT INTO `cliente` (`id`, `nome`, `dataNasc`, `cpf`, `telefone`, `email`, `FK_Endereco`) VALUES (NULL, 'Bernardo Augusto Melo', '1975-07-27', '286.945.918-12', '(95) 2523-6145', 'bernardoaugustomelo@semco.com.br', '1');

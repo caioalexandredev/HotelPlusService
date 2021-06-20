@@ -1,15 +1,25 @@
 
 package Controller;
-
+import java.sql.Date;
 
 public class Ocupacao {
     private int id;
-    private String checkIn;
-    private String checkOut;
-    private String reserva;
+    private Date checkIn;
+    private Date checkOut;
+    private Date reserva;
+    private boolean check;
     private int FK_Cliente;
     private int FK_Quarto;
 
+    public boolean isCheck() {
+        return check;
+    }
+
+    public void setCheck(boolean check) {
+        this.check = check;
+    }
+
+    
     public int getId() {
         return id;
     }
@@ -17,30 +27,32 @@ public class Ocupacao {
     public void setId(int id) {
         this.id = id;
     }
-    
-    public String getCheckIn() {
+
+    public Date getCheckIn() {
         return checkIn;
     }
 
-    public void setCheckIn(String checkIn) {
+    public void setCheckIn(Date checkIn) {
         this.checkIn = checkIn;
     }
 
-    public String getCheckOut() {
+    public Date getCheckOut() {
         return checkOut;
     }
 
-    public void setCheckOut(String checkOut) {
+    public void setCheckOut(Date checkOut) {
         this.checkOut = checkOut;
     }
 
-    public String getReserva() {
+    public Date getReserva() {
         return reserva;
     }
 
-    public void setReserva(String reserva) {
+    public void setReserva(Date reserva) {
         this.reserva = reserva;
     }
+    
+    
 
     public int getFK_Cliente() {
         return FK_Cliente;

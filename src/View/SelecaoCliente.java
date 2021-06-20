@@ -26,7 +26,7 @@ public class SelecaoCliente extends javax.swing.JDialog {
     Font nome = null;
     Font cargo = null;
     Font desc = null;
-    String IDCliente;
+    String IDCliente = "";
     String NomeCliente;
     
     public SelecaoCliente() {

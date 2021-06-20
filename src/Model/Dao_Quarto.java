@@ -76,11 +76,11 @@ public class Dao_Quarto extends Conexao{
     }
     
     //VEREFICAR DISPONIBILIDADE DO QUARTO NO DIA
-    public List<Quarto> buscarDisponivelDia(java.sql.Date data) {
+    public List<Quarto> buscarDisponivelDia() {
         
         List<Quarto> listar = new ArrayList<>();
         
-        String SQL = "SELECT * FROM quarto";
+        String SQL = "SELECT * FROM quarto q WHERE q.id NOT IN (SELECT FK_Quarto FROM ocupacao WHERE 'check-in' != now())";
         try {
             PreparedStatement pst = connection.prepareStatement(SQL);
             ResultSet rs = pst.executeQuery();

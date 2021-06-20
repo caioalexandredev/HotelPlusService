@@ -5,6 +5,7 @@
  */
 package View;
 
+import Controller.Ocupacao;
 import Controller.Quarto;
 import Controller.Usuario;
 import Model.Dao_Ocupacao;
@@ -13,10 +14,13 @@ import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.GraphicsEnvironment;
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -34,8 +38,8 @@ public class CheckIn extends javax.swing.JFrame {
     Font cargo = null;
     Font desc = null;
     Usuario user;
-    String IDQuarto;
-    String IDCliente;
+    String IDQuarto = "0";
+    String IDCliente = "";
     
     public CheckIn(Usuario user) {
         initComponents();
@@ -81,7 +85,7 @@ public class CheckIn extends javax.swing.JFrame {
             DefaultTableModel model =(DefaultTableModel) jTable1.getModel();
             model.getDataVector().clear();// limpa a tabela
             Dao_Quarto listarc = new Dao_Quarto();
-            List<Quarto> lista = listarc.buscarGeral();// aki é a pesquisa que popula meu list
+            List<Quarto> lista = listarc.buscarDisponivelDia();// aki é a pesquisa que popula meu list
 
             if (!lista.isEmpty()) {// aki verifica se a list nao esta vazia
                 for (Quarto c : lista) {// aki ele percorre minha lista
@@ -180,6 +184,9 @@ public class CheckIn extends javax.swing.JFrame {
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 btn_registroMouseExited(evt);
+            }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                btn_registroMousePressed(evt);
             }
         });
         jPanel1.add(btn_registro, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 417, -1, -1));
@@ -418,6 +425,49 @@ public class CheckIn extends javax.swing.JFrame {
     private void txt_quartosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txt_quartosMouseClicked
         JOptionPane.showMessageDialog(null, "Para selecionar um quarto, de um duplo clique no quato disponivel na tabela acima!");
     }//GEN-LAST:event_txt_quartosMouseClicked
+
+    private void btn_registroMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_registroMousePressed
+        if(this.IDCliente.equals("") || this.IDQuarto.equals("0")){
+            JOptionPane.showMessageDialog(null, "Selecione o Cliente e o Quarto Corretamente");
+        }else if(auxiliares.Validacao.verificarDataInvalida(txt_data.getText())){
+            JOptionPane.showMessageDialog(null, "Sua data saída é invalida");
+        }else if(auxiliares.Validacao.verificarDataInvalidaLogica(txt_data.getText())){
+            JOptionPane.showMessageDialog(null, "Sua data saída deve ser depois da entrada!");
+        }else{
+            try {
+                Ocupacao checkinfeito = new Ocupacao();
+                checkinfeito.setFK_Cliente(Integer.parseInt(this.IDCliente));
+                checkinfeito.setFK_Quarto(Integer.parseInt(this.IDQuarto));
+                checkinfeito.setCheck(true);
+                
+                //Convertendo Data para Formato Aceito
+                SimpleDateFormat sdf;
+                sdf = new SimpleDateFormat("dd/MM/yyyy");
+                java.sql.Date data;
+                data = new java.sql.Date(sdf.parse(txt_data.getText()).getTime());
+                checkinfeito.setReserva(data);
+                
+                //data de Hoje
+                java.sql.Date entrada;
+                Date hoje = new Date();
+                entrada = new java.sql.Date(hoje.getTime());
+                
+                //Deve Haver Verificação de Disponibilidade entre datas
+                if(auxiliares.Validacao.verficiarDisponibilidaEntreDatas(entrada, data, Integer.parseInt(this.IDQuarto))){
+                    Dao_Ocupacao ocupa = new Dao_Ocupacao();
+                    ocupa.salvarCheckIn(checkinfeito);
+                }else{
+                    JOptionPane.showMessageDialog(null, "Datas Indisponiveis, verifique!");
+                }
+                
+                JOptionPane.showMessageDialog(null, "Check-in do hóspede " + txt_cliente.getText() + " Feito");
+                new Recepcao(user).setVisible(true);
+                this.dispose();
+            } catch (ParseException ex) {
+                JOptionPane.showMessageDialog(null, ex);
+            }
+        }
+    }//GEN-LAST:event_btn_registroMousePressed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel btn_main;
