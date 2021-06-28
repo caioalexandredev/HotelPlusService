@@ -67,9 +67,6 @@ public class Validacao {
                     System.out.println("SOCORRO");
                 }
                 
-                System.out.println(data1);
-                System.out.println(today);
-                
         } catch (ParseException e) {
             
         }
@@ -87,7 +84,7 @@ public class Validacao {
         //Agora iremos verificar reservas por reservas
         for (int i = 0; i < reservas.size(); i++) {
             Ocupacao ocupa = reservas.get(i);
-            if(ocupa.getCheckIn().getTime() > Entrada.getTime() && ocupa.getReserva().getTime() < Saida.getTime()){
+            if(ocupa.getCheckIn().getTime() > Entrada.getTime() && ocupa.getCheckIn().getTime() < Saida.getTime()){
                 System.out.println("Data Ocupada");
             }
         }

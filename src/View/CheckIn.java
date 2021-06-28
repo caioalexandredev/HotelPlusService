@@ -456,13 +456,14 @@ public class CheckIn extends javax.swing.JFrame {
                 if(auxiliares.Validacao.verficiarDisponibilidaEntreDatas(entrada, data, Integer.parseInt(this.IDQuarto))){
                     Dao_Ocupacao ocupa = new Dao_Ocupacao();
                     ocupa.salvarCheckIn(checkinfeito);
+                    JOptionPane.showMessageDialog(null, "Check-in do hóspede " + txt_cliente.getText() + " Feito");
+                    new Recepcao(user).setVisible(true);
+                    this.dispose();
                 }else{
                     JOptionPane.showMessageDialog(null, "Datas Indisponiveis, verifique!");
                 }
                 
-                JOptionPane.showMessageDialog(null, "Check-in do hóspede " + txt_cliente.getText() + " Feito");
-                new Recepcao(user).setVisible(true);
-                this.dispose();
+                
             } catch (ParseException ex) {
                 JOptionPane.showMessageDialog(null, ex);
             }
