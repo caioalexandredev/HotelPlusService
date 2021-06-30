@@ -89,6 +89,15 @@ CREATE TABLE ponto(
     REFERENCES usuario(id)
 );
 
+
+-- Views do Sistema
+CREATE VIEW checkoutinfs AS
+SELECT o.id, o.`check-in`, o.`check-out`, q.numeroQuarto, c.nome FROM ocupacao o 
+INNER JOIN quarto q ON q.id = o.FK_Quarto
+INNER JOIN cliente c ON c.id = o.FK_Cliente
+WHERE `check` = 0 
+GROUP BY `FK_Quarto`;
+
 -- Endereço para Usuários Padrões
 INSERT INTO `endereco` (`id`, `rua`, `numero`, `complemento`, `bairro`, `cidade`, `estado`) VALUES ('1', 'Rua Padrão', '0', 'Padrão', 'Padrão', 'Padrão', 'Padrão');
 
@@ -106,5 +115,5 @@ INSERT INTO `quarto` (`id`, `numeroQuarto`, `tipo`, `precoDiaria`) VALUES (6, 20
 INSERT INTO `quarto` (`id`, `numeroQuarto`, `tipo`, `precoDiaria`) VALUES (7, 203, 'Triplo', 160.00);
 INSERT INTO `quarto` (`id`, `numeroQuarto`, `tipo`, `precoDiaria`) VALUES (8, 204, 'Triplo', 160.00);
 
---CLIENTES PADRÔES
+-- CLIENTES PADRÔES
 INSERT INTO `cliente` (`id`, `nome`, `dataNasc`, `cpf`, `telefone`, `email`, `FK_Endereco`) VALUES (NULL, 'Bernardo Augusto Melo', '1975-07-27', '286.945.918-12', '(95) 2523-6145', 'bernardoaugustomelo@semco.com.br', '1');

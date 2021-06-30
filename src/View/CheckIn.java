@@ -438,7 +438,7 @@ public class CheckIn extends javax.swing.JFrame {
                 Ocupacao checkinfeito = new Ocupacao();
                 checkinfeito.setFK_Cliente(Integer.parseInt(this.IDCliente));
                 checkinfeito.setFK_Quarto(Integer.parseInt(this.IDQuarto));
-                checkinfeito.setCheck(true);
+                checkinfeito.setCheck(false);
                 checkinfeito.setCheckOut(new java.sql.Date(saida.toDate().getTime()));
                 //Fazemos Laço Pecorrendo Cada Data
                 for(int i = 0; i < DiasReservas; i++){
@@ -456,24 +456,7 @@ public class CheckIn extends javax.swing.JFrame {
             } catch (ParseException ex) {
                 Logger.getLogger(CheckIn.class.getName()).log(Level.SEVERE, null, ex);
             }
-//            try {
-
-//                
-//                //data de Hoje
-//                java.sql.Date entrada;
-//                Date hoje = new Date();
-//                entrada = new java.sql.Date(hoje.getTime());
-//                
-//                //Deve Haver Verificação de Disponibilidade entre datas
-//                if(auxiliares.Validacao.verficiarDisponibilidaEntreDatas(entrada, data, Integer.parseInt(this.IDQuarto))){
-//                    Dao_Ocupacao ocupa = new Dao_Ocupacao();
-//                    ocupa.salvarCheckIn(checkinfeito);
-//                    
-//                }else{
-//                    JOptionPane.showMessageDialog(null, "Datas Indisponiveis, verifique!");
-//                }
-            }
-        
+        }
     }//GEN-LAST:event_btn_registroMousePressed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

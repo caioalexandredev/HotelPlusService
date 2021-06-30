@@ -5,11 +5,17 @@
  */
 package View;
 
+import Controller.Quarto;
+import Controller.Usuario;
+import Model.Dao_Quarto;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.GraphicsEnvironment;
 import java.io.IOException;
+import java.util.List;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -23,8 +29,9 @@ public class CheckOut extends javax.swing.JFrame {
     Font nome = null;
     Font cargo = null;
     Font desc = null;
+    Usuario user;
     
-    public CheckOut() {
+    public CheckOut(Usuario user) {
         initComponents();
         
         try{
@@ -55,6 +62,36 @@ public class CheckOut extends javax.swing.JFrame {
         jLabel_Desc.setFont(desc);
         jLabel_Titulo1.setFont(desc);
         jLabel_Titulo2.setFont(desc);
+        
+        this.user = user;
+        definirDadosEmTela();
+        atualizarlista();
+    }
+    
+    private void atualizarlista(){
+        try {
+            DefaultTableModel model =(DefaultTableModel) jTable1.getModel();
+            model.getDataVector().clear();// limpa a tabela
+            Dao_Quarto listarc = new Dao_Quarto();
+            List<Quarto> lista = listarc.buscarDisponivelDia();// aki é a pesquisa que popula meu list
+
+            if (!lista.isEmpty()) {// aki verifica se a list nao esta vazia
+                for (Quarto c : lista) {// aki ele percorre minha lista
+                    
+                    model.addRow(new Object[]{c.getId(), c.getNumeroQuarto(), c.getTipo(), c.getPrecoDiaria()});// adiciona na jtbale
+                }
+            }else{
+                model.setNumRows(1);
+            }
+        } 
+        catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Erro ao atualizar tabela\n" + e.getMessage(), null, JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    private void definirDadosEmTela(){
+        jLabel_Nome.setText(this.user.getNome());
+        jLabel_Cargo.setText("Cargo: " + this.user.getCargo());
     }
 
     /**
@@ -115,11 +152,11 @@ public class CheckOut extends javax.swing.JFrame {
 
         jLabel_Titulo2.setForeground(new java.awt.Color(140, 140, 140));
         jLabel_Titulo2.setText("no Quarto de Hotel");
-        jPanel1.add(jLabel_Titulo2, new org.netbeans.lib.awtextra.AbsoluteConstraints(325, 70, -1, -1));
+        jPanel1.add(jLabel_Titulo2, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 70, -1, -1));
 
         jLabel_Titulo1.setForeground(new java.awt.Color(140, 140, 140));
         jLabel_Titulo1.setText("Tabela de Registro de Saída");
-        jPanel1.add(jLabel_Titulo1, new org.netbeans.lib.awtextra.AbsoluteConstraints(325, 50, -1, -1));
+        jPanel1.add(jLabel_Titulo1, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 50, -1, -1));
 
         jLabel_Cargo.setBackground(new java.awt.Color(92, 92, 92));
         jLabel_Cargo.setForeground(new java.awt.Color(150, 150, 150));
@@ -138,6 +175,9 @@ public class CheckOut extends javax.swing.JFrame {
         btn_main.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/btn_A.png"))); // NOI18N
         btn_main.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btn_main.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btn_mainMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 btn_mainMouseEntered(evt);
             }
@@ -169,21 +209,38 @@ public class CheckOut extends javax.swing.JFrame {
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "ID", "Check-In", "Check-Out", "Quarto", "Cliente"
             }
-        ));
-        jScrollPane1.setViewportView(jTable1);
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 180, -1, 140));
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(jTable1);
+        if (jTable1.getColumnModel().getColumnCount() > 0) {
+            jTable1.getColumnModel().getColumn(0).setResizable(false);
+            jTable1.getColumnModel().getColumn(0).setPreferredWidth(10);
+            jTable1.getColumnModel().getColumn(1).setResizable(false);
+            jTable1.getColumnModel().getColumn(2).setResizable(false);
+            jTable1.getColumnModel().getColumn(3).setResizable(false);
+            jTable1.getColumnModel().getColumn(3).setPreferredWidth(10);
+            jTable1.getColumnModel().getColumn(4).setResizable(false);
+        }
+
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 180, 590, 140));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 860, 520));
 
@@ -220,47 +277,10 @@ public class CheckOut extends javax.swing.JFrame {
         btn_checkout.setIcon( ii );
     }//GEN-LAST:event_btn_checkoutMouseExited
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(CheckOut.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(CheckOut.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(CheckOut.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(CheckOut.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new CheckOut().setVisible(true);
-            }
-        });
-    }
+    private void btn_mainMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_mainMouseClicked
+        new Recepcao(user).setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btn_mainMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel btn_checkout;
