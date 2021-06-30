@@ -19,11 +19,14 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import org.joda.time.DateTime;
+import org.joda.time.Days;
 
 /**
  *
@@ -401,20 +404,6 @@ public class CheckIn extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Nenhum Cliente Selecionado, Por Favor Selecione");
             ImageIcon iii = new ImageIcon(getClass().getResource("/assets/form_cliente_A.png"));
             form_cliente.setIcon( iii );
-        }else{
-            //Convertendo Data para Formato Aceito
-            java.sql.Date data = new java.sql.Date(Calendar.getInstance().getTime().getTime());
-            Dao_Ocupacao ocupacaov = new Dao_Ocupacao();
-            if(ocupacaov.verificarReserva(Integer.parseInt(this.IDCliente), data)){
-                Object[] options = { "Confirmar", "Cancelar" };
-                int opcao = JOptionPane.showOptionDialog(null, "O Cliente " + txt_cliente.getText() + " tem uma reserva marcada iniciando hoje, deseja apenas comfirmar?","Confirmação", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
-                if(opcao == 0){
-                    ocupacaov.confirmarReserva(ocupacaov.idOcupacao);
-                    JOptionPane.showMessageDialog(null, "Check-in Efetuado! Retornando a Recepção!");
-                    new Recepcao(this.user).setVisible(true);
-                    this.dispose();
-                }
-            }
         }
     }//GEN-LAST:event_txt_clienteMouseClicked
 
@@ -433,41 +422,58 @@ public class CheckIn extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Sua data saída é invalida");
         }else if(auxiliares.Validacao.verificarDataInvalidaLogica(txt_data.getText())){
             JOptionPane.showMessageDialog(null, "Sua data saída deve ser depois da entrada!");
+        }else if(auxiliares.Validacao.verficiarDisponibilidaEntreDatas(txt_data.getText(), Integer.parseInt(IDQuarto))){
+            JOptionPane.showMessageDialog(null, "Quartos Não Disponiveis");
         }else{
+            //Capturamos a data de Entrada
+            DateTime entrada = auxiliares.Data.agora();
             try {
+                //Capturamos a Data de Saida
+                DateTime saida = auxiliares.Data.converterString(txt_data.getText());
+                //Calculamos quantos dias de Reservas serão feitos
+                int DiasReservas = Days.daysBetween(entrada, saida).getDays() + 1;
+                //Variavel de Data Pecorrida
+                DateTime pecorrido = entrada;
+                //Configuramos a Reserva
                 Ocupacao checkinfeito = new Ocupacao();
                 checkinfeito.setFK_Cliente(Integer.parseInt(this.IDCliente));
                 checkinfeito.setFK_Quarto(Integer.parseInt(this.IDQuarto));
                 checkinfeito.setCheck(true);
-                
-                //Convertendo Data para Formato Aceito
-                SimpleDateFormat sdf;
-                sdf = new SimpleDateFormat("dd/MM/yyyy");
-                java.sql.Date data;
-                data = new java.sql.Date(sdf.parse(txt_data.getText()).getTime());
-                checkinfeito.setReserva(data);
-                
-                //data de Hoje
-                java.sql.Date entrada;
-                Date hoje = new Date();
-                entrada = new java.sql.Date(hoje.getTime());
-                
-                //Deve Haver Verificação de Disponibilidade entre datas
-                if(auxiliares.Validacao.verficiarDisponibilidaEntreDatas(entrada, data, Integer.parseInt(this.IDQuarto))){
+                checkinfeito.setCheckOut(new java.sql.Date(saida.toDate().getTime()));
+                //Fazemos Laço Pecorrendo Cada Data
+                for(int i = 0; i < DiasReservas; i++){
+                    //Registramos a Reserva do dia em uma Ocupação Propria
+                    checkinfeito.setReserva(new java.sql.Date(pecorrido.toDate().getTime()));
                     Dao_Ocupacao ocupa = new Dao_Ocupacao();
                     ocupa.salvarCheckIn(checkinfeito);
-                    JOptionPane.showMessageDialog(null, "Check-in do hóspede " + txt_cliente.getText() + " Feito");
-                    new Recepcao(user).setVisible(true);
-                    this.dispose();
-                }else{
-                    JOptionPane.showMessageDialog(null, "Datas Indisponiveis, verifique!");
+                    //Pecorre o dia para o proximo laço
+                    pecorrido = auxiliares.Data.avancardia(pecorrido);
                 }
-                
-                
+                //Informamos o Registro e Finalizamos a Sessão
+                JOptionPane.showMessageDialog(null, "Check-in do hóspede " + txt_cliente.getText() + " Feito");
+                new Recepcao(user).setVisible(true);
+                this.dispose();
             } catch (ParseException ex) {
-                JOptionPane.showMessageDialog(null, ex);
+                Logger.getLogger(CheckIn.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }
+//            try {
+
+//                
+//                //data de Hoje
+//                java.sql.Date entrada;
+//                Date hoje = new Date();
+//                entrada = new java.sql.Date(hoje.getTime());
+//                
+//                //Deve Haver Verificação de Disponibilidade entre datas
+//                if(auxiliares.Validacao.verficiarDisponibilidaEntreDatas(entrada, data, Integer.parseInt(this.IDQuarto))){
+//                    Dao_Ocupacao ocupa = new Dao_Ocupacao();
+//                    ocupa.salvarCheckIn(checkinfeito);
+//                    
+//                }else{
+//                    JOptionPane.showMessageDialog(null, "Datas Indisponiveis, verifique!");
+//                }
+            }
+        
     }//GEN-LAST:event_btn_registroMousePressed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

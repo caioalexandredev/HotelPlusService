@@ -63,9 +63,9 @@ public class Dao_Ocupacao extends Conexao {
         }
     }
     
-    //Verificar se Reserva Existe no Dia e com o Cliente
+    //Verificar se Reserva Existe no Quarto e Dia
     public boolean verificarReserva(int id, java.sql.Date date){
-        String sql = "SELECT * FROM ocupacao WHERE FK_Cliente = ? AND `check-in` = ? AND `check` = ?";
+        String sql = "SELECT * FROM ocupacao WHERE FK_Quarto = ? AND `reserva` = ?";
         PreparedStatement pst;
         
         //Cria a lista de retorno
@@ -75,7 +75,6 @@ public class Dao_Ocupacao extends Conexao {
             pst = connection.prepareStatement(sql);
             pst.setInt(1, id);
             pst.setDate(2, date);
-            pst.setBoolean(3, false);
             
             //Executa a Query e armazena o resultado
             ResultSet rs = pst.executeQuery();
@@ -90,7 +89,7 @@ public class Dao_Ocupacao extends Conexao {
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Erro interno: " + e);
         }
-        return !listar.isEmpty();
+        return listar.isEmpty();
     }
     
     //Verificar se Reserva Existe no Dia e com o Cliente

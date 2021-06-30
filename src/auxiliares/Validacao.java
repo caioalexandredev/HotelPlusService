@@ -3,11 +3,16 @@ package auxiliares;
 import Controller.Ocupacao;
 import Model.Dao_Ocupacao;
 import Model.Dao_Usuario;
+import View.CheckIn;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.joda.time.DateTime;
+import org.joda.time.Days;
 
 public class Validacao {
     public static boolean verificarCamposVazios(String campos[]){
@@ -74,21 +79,32 @@ public class Validacao {
         return retorno;
     }
     
-    public static boolean verficiarDisponibilidaEntreDatas(java.sql.Date Entrada, java.sql.Date Saida, int Quarto){
+    public static boolean verficiarDisponibilidaEntreDatas(String SaidaU, int Quarto){
+        //Variavel de retorno
         boolean retorno = false;
-        
-        //Primeiro capaturamos as Ocupações Registradas que não obtiveram checkout ainda
-        Dao_Ocupacao reserva = new Dao_Ocupacao();
-        List<Ocupacao> reservas = reserva.buscarReservas(0);
-        
-        //Agora iremos verificar reservas por reservas
-        for (int i = 0; i < reservas.size(); i++) {
-            Ocupacao ocupa = reservas.get(i);
-            if(ocupa.getCheckIn().getTime() > Entrada.getTime() && ocupa.getCheckIn().getTime() < Saida.getTime()){
-                System.out.println("Data Ocupada");
+        //Capturamos a data de Entrada
+        DateTime entrada = auxiliares.Data.agora();
+        try {
+            //Capturamos a Data de Saida
+            DateTime saida = auxiliares.Data.converterString(SaidaU);
+            //Calculamos quantos dias de Reservas serão feitos
+            int DiasReservas = Days.daysBetween(entrada, saida).getDays() + 1;
+            //Variavel de Data Pecorrida
+            DateTime pecorrido = entrada;
+            //Fazemos Laço Pecorrendo Cada Data
+            for(int i = 0; i < DiasReservas; i++){
+                //Verificamos se existe reserva naquele dia e quarto
+                Dao_Ocupacao ocupa = new Dao_Ocupacao();
+                if(!ocupa.verificarReserva(Quarto, new java.sql.Date(pecorrido.toDate().getTime()))){
+                    retorno = true;
+                }
+                //Pecorre o dia para o proximo laço
+                pecorrido = auxiliares.Data.avancardia(pecorrido);
             }
+        } catch (ParseException ex) {
+            Logger.getLogger(CheckIn.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         return retorno;
-    }
+    }  
 }
