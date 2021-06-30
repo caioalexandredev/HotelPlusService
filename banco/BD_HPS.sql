@@ -10,8 +10,8 @@ CREATE TABLE quarto (
   
 CREATE TABLE produtos (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `nome` INT NULL,
-  `preco` VARCHAR(45) NULL,
+  `nome` VARCHAR(50) NULL,
+  `preco` DOUBLE NULL,
   PRIMARY KEY (`id`)
 );
   
@@ -115,5 +115,17 @@ INSERT INTO `quarto` (`id`, `numeroQuarto`, `tipo`, `precoDiaria`) VALUES (6, 20
 INSERT INTO `quarto` (`id`, `numeroQuarto`, `tipo`, `precoDiaria`) VALUES (7, 203, 'Triplo', 160.00);
 INSERT INTO `quarto` (`id`, `numeroQuarto`, `tipo`, `precoDiaria`) VALUES (8, 204, 'Triplo', 160.00);
 
--- CLIENTES PADRÔES
+-- CLIENTES PADRÕES
 INSERT INTO `cliente` (`id`, `nome`, `dataNasc`, `cpf`, `telefone`, `email`, `FK_Endereco`) VALUES (NULL, 'Bernardo Augusto Melo', '1975-07-27', '286.945.918-12', '(95) 2523-6145', 'bernardoaugustomelo@semco.com.br', '1');
+
+-- PRODUTOS PADRÕES
+INSERT INTO `produtos` (`id`, `nome`, `preco`) VALUES (NULL, 'Água Copo', '2.50');
+INSERT INTO `produtos` (`id`, `nome`, `preco`) VALUES (NULL, 'Água Garrafa', '4.50');
+INSERT INTO `produtos` (`id`, `nome`, `preco`) VALUES (NULL, 'Refrigerante/Lata', '5.50');
+INSERT INTO `produtos` (`id`, `nome`, `preco`) VALUES (NULL, 'Cerveja Nacional', '6.50');
+INSERT INTO `produtos` (`id`, `nome`, `preco`) VALUES (NULL, 'Suco de Frutas', '6.00');
+INSERT INTO `produtos` (`id`, `nome`, `preco`) VALUES (NULL, 'Água de Coco', '6.00');
+INSERT INTO `produtos` (`id`, `nome`, `preco`) VALUES (NULL, 'Achocolatado', '6.00');
+INSERT INTO `produtos` (`id`, `nome`, `preco`) VALUES (NULL, 'Castanha de Caju', '7.50');
+INSERT INTO `produtos` (`id`, `nome`, `preco`) VALUES (NULL, 'Chocolate/barrinha', '7.50');
+INSERT INTO `produtos` (`id`, `nome`, `preco`) VALUES (NULL, 'Cereais em Barrinha', '5.00');

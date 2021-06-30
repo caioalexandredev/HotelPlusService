@@ -4,7 +4,6 @@ import Controller.Produtos;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -57,6 +56,34 @@ public class Dao_Produtos extends Conexao{
         try {
             pst = connection.prepareStatement(sql);
             pst.setInt(1, id);
+            
+            //Executa a Query e armazena o resultado
+            ResultSet rs = pst.executeQuery();
+            
+            //Vamos chamar um resultado por vez dentro de um WHILE
+            while(rs.next()){
+                Produtos produto = new Produtos();
+                produto.setId(rs.getInt("id"));
+                produto.setNome(rs.getString("nome"));
+                produto.setPreco(rs.getDouble("preco"));
+                listar.add(produto);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Erro interno: " + e);
+        }
+        return listar;
+    }
+    
+    //MÉTODO BUSCAR GERAL
+    public List<Produtos> buscaGeral (){
+        String sql = "SELECT * FROM produtos";
+        PreparedStatement pst;
+        
+        //Cria a lista de retorno
+        List<Produtos> listar = new ArrayList<>();
+        
+        try {
+            pst = connection.prepareStatement(sql);
             
             //Executa a Query e armazena o resultado
             ResultSet rs = pst.executeQuery();

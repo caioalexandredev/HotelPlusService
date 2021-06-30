@@ -1,6 +1,7 @@
 
 package Model;
 
+import Controller.Hospedagem;
 import Controller.Ocupacao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -114,7 +115,7 @@ public class Dao_Ocupacao extends Conexao {
         //Espaço para armazenar os dados
         List<Ocupacao> listar = new ArrayList<>();
         // Executa a SQL e captura o resultado da consulta
-        String SQL = "SELECT * FROM `ocupacao` WHERE `check-out` IS NULL AND `FK_Quarto` = ?";
+        String SQL = "SELECT * FROM `ocupacao` WHERE`id` = ?";
         
         try {
             PreparedStatement pst = connection.prepareStatement(SQL);
@@ -131,9 +132,37 @@ public class Dao_Ocupacao extends Conexao {
                 ocupacao.setReserva(rs.getDate("reserva"));
                 ocupacao.setCheck(rs.getBoolean("check"));
                 ocupacao.setFK_Cliente(rs.getInt("FK_Cliente"));
-                ocupacao.setFK_Cliente(rs.getInt("FK_Quarto"));
+                ocupacao.setFK_Quarto(rs.getInt("FK_Quarto"));
                 // Armazena a linha lida em uma lista
                 listar.add(ocupacao);
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Erro: " + e);
+        }
+        return listar;
+    }
+    
+    //Retornar Dados Tratados de Hospedagem
+    public List<Hospedagem> hospedagem() {
+        //Espaço para armazenar os dados
+        List<Hospedagem> listar = new ArrayList<>();
+        // Executa a SQL e captura o resultado da consulta
+        String SQL = "SELECT * FROM `checkoutinfs`";
+        
+        try {
+            PreparedStatement pst = connection.prepareStatement(SQL);
+            //Executa a Query e armazena o resultado
+            ResultSet rs = pst.executeQuery();
+            // Cria um objeto para armazenar uma linha da consulta
+            while (rs.next()) {
+                Hospedagem hospedagem = new Hospedagem();
+                hospedagem.setId(rs.getInt("id"));
+                hospedagem.setCheck_IN(rs.getDate("check-in"));
+                hospedagem.setCheck_OUT(rs.getDate("check-out"));
+                hospedagem.setQuarto(rs.getInt("numeroQuarto"));
+                hospedagem.setNome(rs.getString("nome"));
+                // Armazena a linha lida em uma lista
+                listar.add(hospedagem);
             }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Erro: " + e);

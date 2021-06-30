@@ -64,6 +64,7 @@ public class Dao_Cliente extends Conexao {
             while(rs.next()){
                 Cliente cliente = new Cliente();
                 cliente.setId(rs.getInt("id"));
+                cliente.setNome(rs.getString("nome"));
                 lista.add(cliente);
             }
         } catch (Exception ex){

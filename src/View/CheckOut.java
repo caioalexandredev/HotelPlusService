@@ -5,9 +5,9 @@
  */
 package View;
 
-import Controller.Quarto;
+import Controller.Hospedagem;
 import Controller.Usuario;
-import Model.Dao_Quarto;
+import Model.Dao_Ocupacao;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.GraphicsEnvironment;
@@ -72,13 +72,13 @@ public class CheckOut extends javax.swing.JFrame {
         try {
             DefaultTableModel model =(DefaultTableModel) jTable1.getModel();
             model.getDataVector().clear();// limpa a tabela
-            Dao_Quarto listarc = new Dao_Quarto();
-            List<Quarto> lista = listarc.buscarDisponivelDia();// aki é a pesquisa que popula meu list
+            Dao_Ocupacao listarc = new Dao_Ocupacao();
+            List<Hospedagem> lista = listarc.hospedagem();// aki é a pesquisa que popula meu list
 
             if (!lista.isEmpty()) {// aki verifica se a list nao esta vazia
-                for (Quarto c : lista) {// aki ele percorre minha lista
+                for (Hospedagem c : lista) {// aki ele percorre minha lista
                     
-                    model.addRow(new Object[]{c.getId(), c.getNumeroQuarto(), c.getTipo(), c.getPrecoDiaria()});// adiciona na jtbale
+                    model.addRow(new Object[]{c.getId(), c.getCheck_IN(), c.getCheck_OUT(), c.getQuarto(), c.getNome()});// adiciona na jtbale
                 }
             }else{
                 model.setNumRows(1);
@@ -141,6 +141,9 @@ public class CheckOut extends javax.swing.JFrame {
         btn_checkout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/btn_checkout_A.png"))); // NOI18N
         btn_checkout.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btn_checkout.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btn_checkoutMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 btn_checkoutMouseEntered(evt);
             }
@@ -152,11 +155,11 @@ public class CheckOut extends javax.swing.JFrame {
 
         jLabel_Titulo2.setForeground(new java.awt.Color(140, 140, 140));
         jLabel_Titulo2.setText("no Quarto de Hotel");
-        jPanel1.add(jLabel_Titulo2, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 70, -1, -1));
+        jPanel1.add(jLabel_Titulo2, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 70, -1, -1));
 
         jLabel_Titulo1.setForeground(new java.awt.Color(140, 140, 140));
         jLabel_Titulo1.setText("Tabela de Registro de Saída");
-        jPanel1.add(jLabel_Titulo1, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 50, -1, -1));
+        jPanel1.add(jLabel_Titulo1, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 50, -1, -1));
 
         jLabel_Cargo.setBackground(new java.awt.Color(92, 92, 92));
         jLabel_Cargo.setForeground(new java.awt.Color(150, 150, 150));
@@ -187,11 +190,16 @@ public class CheckOut extends javax.swing.JFrame {
         });
         jPanel1.add(btn_main, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 50, -1, -1));
 
+        txt_ocupacao.setEditable(false);
         txt_ocupacao.setBackground(new java.awt.Color(255, 255, 255, 0));
         txt_ocupacao.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
         txt_ocupacao.setForeground(new java.awt.Color(83, 83, 83));
         txt_ocupacao.setBorder(null);
-        txt_ocupacao.setOpaque(false);
+        txt_ocupacao.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                txt_ocupacaoMouseClicked(evt);
+            }
+        });
         txt_ocupacao.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txt_ocupacaoActionPerformed(evt);
@@ -227,6 +235,11 @@ public class CheckOut extends javax.swing.JFrame {
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
+            }
+        });
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable1MouseClicked(evt);
             }
         });
         jScrollPane1.setViewportView(jTable1);
@@ -281,6 +294,34 @@ public class CheckOut extends javax.swing.JFrame {
         new Recepcao(user).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btn_mainMouseClicked
+
+    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+        int row = jTable1.rowAtPoint(evt.getPoint());
+        int col = jTable1.columnAtPoint(evt.getPoint());
+        if (row >= 0 && col >= 0 && evt.getClickCount() == 2) {
+            ImageIcon ii = new ImageIcon(getClass().getResource("/assets/form_ocupacao_B.png"));
+            form_quarto.setIcon( ii );
+            txt_ocupacao.setText(jTable1.getValueAt(row, 0).toString());
+        }
+    }//GEN-LAST:event_jTable1MouseClicked
+
+    private void txt_ocupacaoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txt_ocupacaoMouseClicked
+        JOptionPane.showMessageDialog(null, "De um duplo clique na hospedagem desejada e depois em Check-Out");
+    }//GEN-LAST:event_txt_ocupacaoMouseClicked
+
+    private void btn_checkoutMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_checkoutMouseClicked
+        if(!txt_ocupacao.getText().equals("")){
+            Object[] options = { "Confirmar", "Cancelar" };
+            int opcao = JOptionPane.showOptionDialog(null, "Deseja Iniciar o Processo de Check-Out do Quarto Selecionado?","Confirmação", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+            if(opcao == 0){
+                CheckOutFinal finaliza = new CheckOutFinal(user, Integer.parseInt(txt_ocupacao.getText()));
+                finaliza.setVisible(true);
+                this.dispose();
+            }
+        }else{
+            JOptionPane.showMessageDialog(null, "De um duplo clique na hospedagem desejada e depois em Check-Out");
+        }
+    }//GEN-LAST:event_btn_checkoutMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel btn_checkout;

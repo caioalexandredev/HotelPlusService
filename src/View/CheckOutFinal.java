@@ -5,11 +5,21 @@
  */
 package View;
 
+import Controller.Hospedagem;
+import Controller.Produtos;
+import Controller.Usuario;
+import Model.Dao_Ocupacao;
+import Model.Dao_Produtos;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.GraphicsEnvironment;
+import java.awt.event.KeyEvent;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -23,8 +33,13 @@ public class CheckOutFinal extends javax.swing.JFrame {
     Font nome = null;
     Font cargo = null;
     Font desc = null;
+    Usuario user;
+    String produtosExibidos = "";
+    double precoFinalProdutos = 0;
+    int ocupacao;
+    String textoNotaProdutos = "";
     
-    public CheckOutFinal() {
+    public CheckOutFinal(Usuario user, int Ocupacao) {
         initComponents();
         
         try{
@@ -55,6 +70,55 @@ public class CheckOutFinal extends javax.swing.JFrame {
         jLabel_Desc.setFont(desc);
         jLabel_Titulo1.setFont(desc);
         jLabel_Titulo2.setFont(desc);
+        
+        this.user = user;
+        definirDadosEmTela();
+        
+        txt_nota.setText("Produtos Consumidos\n=================\n");
+        atualizarlista();
+        
+        this.ocupacao = Ocupacao;
+    }
+    
+    private void definirDadosEmTela(){
+        jLabel_Nome.setText(this.user.getNome());
+        jLabel_Cargo.setText("Cargo: " + this.user.getCargo());
+    }
+    
+    private void adicionarItem(int id){
+        String topo = "Produtos Consumidos\n=================\n\n";
+        
+        Dao_Produtos produtoNovo = new Dao_Produtos();
+        List<Produtos> listar = produtoNovo.buscarViaID(id);
+        if(listar.isEmpty()){
+            JOptionPane.showMessageDialog(null, "Nenhum produto encontrado!");
+        }else{
+            this.precoFinalProdutos += listar.get(0).getPreco();
+            txt_produtos.setText("");
+            this.produtosExibidos += listar.get(0).getNome() + "______R$" + listar.get(0).getPreco() + "\n";
+            txt_nota.setText(topo + this.produtosExibidos + "\n=================\nTotal: R$" + this.precoFinalProdutos);
+            textoNotaProdutos = topo + this.produtosExibidos + "\n=================\nValor Total de produtos: R$" + this.precoFinalProdutos + "\n";
+        }
+    }
+    
+    private void atualizarlista(){
+        try {
+            DefaultTableModel model =(DefaultTableModel) jTable1.getModel();
+            model.getDataVector().clear();// limpa a tabela
+            Dao_Produtos produtosgerais = new Dao_Produtos();
+            List<Produtos> lista = produtosgerais.buscaGeral();// aki é a pesquisa que popula meu list
+
+            if (!lista.isEmpty()) {// aki verifica se a list nao esta vazia
+                for (Produtos c : lista) {// aki ele percorre minha lista
+                    model.addRow(new Object[]{c.getId(), c.getNome(), c.getPreco()});// adiciona na jtbale
+                }
+            }else{
+                model.setNumRows(1);
+            }
+        } 
+        catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Erro ao atualizar tabela\n" + e.getMessage(), null, JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     /**
@@ -81,8 +145,9 @@ public class CheckOutFinal extends javax.swing.JFrame {
         form_produto = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
-        txt_data = new javax.swing.JTextField();
-        form_data = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        txt_nota = new javax.swing.JTextPane();
+        jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Hotel Plus Service - Check-Out Finalização");
@@ -106,6 +171,9 @@ public class CheckOutFinal extends javax.swing.JFrame {
         btn_checkout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/btn_checkout_A.png"))); // NOI18N
         btn_checkout.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btn_checkout.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btn_checkoutMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 btn_checkoutMouseEntered(evt);
             }
@@ -117,11 +185,11 @@ public class CheckOutFinal extends javax.swing.JFrame {
 
         jLabel_Titulo2.setForeground(new java.awt.Color(140, 140, 140));
         jLabel_Titulo2.setText("Consumidos do Frigobar");
-        jPanel1.add(jLabel_Titulo2, new org.netbeans.lib.awtextra.AbsoluteConstraints(325, 70, -1, -1));
+        jPanel1.add(jLabel_Titulo2, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 70, -1, -1));
 
         jLabel_Titulo1.setForeground(new java.awt.Color(140, 140, 140));
         jLabel_Titulo1.setText("Tabela de Registro de Itens");
-        jPanel1.add(jLabel_Titulo1, new org.netbeans.lib.awtextra.AbsoluteConstraints(325, 50, -1, -1));
+        jPanel1.add(jLabel_Titulo1, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 50, -1, -1));
 
         jLabel_Cargo.setBackground(new java.awt.Color(92, 92, 92));
         jLabel_Cargo.setForeground(new java.awt.Color(150, 150, 150));
@@ -140,6 +208,9 @@ public class CheckOutFinal extends javax.swing.JFrame {
         btn_main.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/btn_A.png"))); // NOI18N
         btn_main.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btn_main.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btn_mainMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 btn_mainMouseEntered(evt);
             }
@@ -153,7 +224,6 @@ public class CheckOutFinal extends javax.swing.JFrame {
         txt_produtos.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
         txt_produtos.setForeground(new java.awt.Color(83, 83, 83));
         txt_produtos.setBorder(null);
-        txt_produtos.setOpaque(false);
         txt_produtos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txt_produtosActionPerformed(evt);
@@ -171,41 +241,49 @@ public class CheckOutFinal extends javax.swing.JFrame {
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "ID", "Nome", "Preço"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(jTable1);
+        if (jTable1.getColumnModel().getColumnCount() > 0) {
+            jTable1.getColumnModel().getColumn(0).setResizable(false);
+            jTable1.getColumnModel().getColumn(0).setPreferredWidth(5);
+            jTable1.getColumnModel().getColumn(1).setResizable(false);
+            jTable1.getColumnModel().getColumn(1).setPreferredWidth(200);
+            jTable1.getColumnModel().getColumn(2).setResizable(false);
+            jTable1.getColumnModel().getColumn(2).setPreferredWidth(5);
+        }
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 180, -1, 140));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 190, 330, 170));
 
-        txt_data.setBackground(new java.awt.Color(255, 255, 255, 0));
-        txt_data.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
-        txt_data.setForeground(new java.awt.Color(83, 83, 83));
-        txt_data.setBorder(null);
-        txt_data.setOpaque(false);
-        txt_data.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txt_dataActionPerformed(evt);
-            }
-        });
-        txt_data.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                txt_dataKeyPressed(evt);
-            }
-        });
-        jPanel1.add(txt_data, new org.netbeans.lib.awtextra.AbsoluteConstraints(375, 420, 180, 30));
+        txt_nota.setEditable(false);
+        txt_nota.setBackground(new java.awt.Color(255, 255, 102));
+        jScrollPane2.setViewportView(txt_nota);
 
-        form_data.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/form_data_A.png"))); // NOI18N
-        jPanel1.add(form_data, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 400, -1, -1));
+        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 190, 200, 170));
+
+        jLabel2.setBackground(new java.awt.Color(74, 0, 224));
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(74, 0, 224));
+        jLabel2.setText("Pressione Enter para adicionar o produto");
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 460, -1, -1));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 860, 520));
 
@@ -230,6 +308,10 @@ public class CheckOutFinal extends javax.swing.JFrame {
     private void txt_produtosKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_produtosKeyPressed
         ImageIcon ii = new ImageIcon(getClass().getResource("/assets/btn_produtos_B.png"));
         form_produto.setIcon( ii );
+        
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER){
+            this.adicionarItem(Integer.parseInt(txt_produtos.getText()));
+        }
     }//GEN-LAST:event_txt_produtosKeyPressed
 
     private void btn_checkoutMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_checkoutMouseEntered
@@ -242,71 +324,24 @@ public class CheckOutFinal extends javax.swing.JFrame {
         btn_checkout.setIcon( ii );
     }//GEN-LAST:event_btn_checkoutMouseExited
 
-    private void txt_dataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_dataActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txt_dataActionPerformed
+    private void btn_mainMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_mainMouseClicked
+        new Recepcao(user).setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btn_mainMouseClicked
 
-    private void txt_dataKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_dataKeyPressed
-        ImageIcon ii = new ImageIcon(getClass().getResource("/assets/btn_data_B.png"));
-        form_data.setIcon( ii );
-    }//GEN-LAST:event_txt_dataKeyPressed
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(CheckOutFinal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(CheckOutFinal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(CheckOutFinal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(CheckOutFinal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new CheckOutFinal().setVisible(true);
-            }
-        });
-    }
+    private void btn_checkoutMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_checkoutMouseClicked
+        CheckOutFinalConfirm modal = new CheckOutFinalConfirm(textoNotaProdutos, this.precoFinalProdutos, this.ocupacao);
+        modal.setModal(true);
+        modal.setVisible(true);
+        modal.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+    }//GEN-LAST:event_btn_checkoutMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel btn_checkout;
     private javax.swing.JLabel btn_main;
-    private javax.swing.JLabel form_data;
     private javax.swing.JLabel form_produto;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel_Cargo;
     private javax.swing.JLabel jLabel_Desc;
     private javax.swing.JLabel jLabel_Nome;
@@ -316,8 +351,9 @@ public class CheckOutFinal extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel_Titulo2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTextField txt_data;
+    private javax.swing.JTextPane txt_nota;
     private javax.swing.JTextField txt_produtos;
     // End of variables declaration//GEN-END:variables
 }
