@@ -44,15 +44,15 @@ public class Dao_Ocupacao extends Conexao {
         }
     }
     
-    public boolean salvarCheckOut(Ocupacao ocupacao){
-        String sql = "INSERT INTO `ocupacao` (`id`, `check-in`, `check-out`, `reserva`, `check`, `FK_Cliente`, `FK_Quarto`) VALUES (NULL, now(), NULL, ?, ?, ?, ?)";
+    public boolean salvarCheckOu(Ocupacao ocupacao){
+        String sql = "UPDATE `ocupacao` SET `check`= 1 WHERE `check-in` = ? AND `check-out` = ? AND `FK_Cliente` = ? AND `FK_Quarto` = ?;";
         PreparedStatement pst;
         
         try {
             pst = connection.prepareStatement(sql);
    
-            pst.setDate(1, ocupacao.getReserva());
-            pst.setBoolean(2, ocupacao.isCheck());
+            pst.setDate(1, ocupacao.getCheckIn());
+            pst.setDate(2, ocupacao.getCheckOut());
             pst.setInt(3, ocupacao.getFK_Cliente());
             pst.setInt(4, ocupacao.getFK_Quarto());
 

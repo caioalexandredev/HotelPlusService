@@ -89,6 +89,16 @@ CREATE TABLE ponto(
     REFERENCES usuario(id)
 );
 
+CREATE TABLE log ( 
+	id INT NOT NULL AUTO_INCREMENT, 
+	log TEXT NOT NULL,
+	FK_Cliente INT NULL, 
+	FK_Usuario INT NULL, 
+	PRIMARY KEY (id),
+	FOREIGN KEY (FK_Cliente) REFERENCES cliente(id),
+	FOREIGN KEY (FK_Usuario) REFERENCES usuario(id)
+);
+
 
 -- Views do Sistema
 CREATE VIEW checkoutinfs AS

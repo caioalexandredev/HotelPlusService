@@ -6,9 +6,11 @@
 package View;
 
 import Controller.Cliente;
+import Controller.Log;
 import Controller.Ocupacao;
 import Controller.Quarto;
 import Model.Dao_Cliente;
+import Model.Dao_Log;
 import Model.Dao_Ocupacao;
 import Model.Dao_Quarto;
 import javax.swing.ImageIcon;
@@ -21,7 +23,11 @@ import org.joda.time.Days;
  */
 public class CheckOutFinalConfirm extends javax.swing.JDialog {
 
-    boolean check = true;
+    boolean check = false;
+    String NotaRegistro;
+    int idCliente;
+    int idQuarto;
+    Ocupacao registroPrimordial;
     /**
      * Creates new form CheckOutFinalConfirm
      */
@@ -53,6 +59,10 @@ public class CheckOutFinalConfirm extends javax.swing.JDialog {
         Nota +="VALOR TOTAL = " + (quarto.getPrecoDiaria() * dias + valorProdutos);
         
         txt_nota.setText(Nota);
+        this.NotaRegistro = Nota;
+        this.idCliente = cliente.getId();
+        this.registroPrimordial = hospedagem;
+        
     }
 
     /**
@@ -85,6 +95,9 @@ public class CheckOutFinalConfirm extends javax.swing.JDialog {
         btn_final.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/btn-finaliza-checkout-A.png"))); // NOI18N
         btn_final.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btn_final.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btn_finalMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 btn_finalMouseEntered(evt);
             }
@@ -109,6 +122,26 @@ public class CheckOutFinalConfirm extends javax.swing.JDialog {
         ImageIcon ii = new ImageIcon(getClass().getResource("/assets/btn-finaliza-checkout-A.png"));
         btn_final.setIcon( ii );
     }//GEN-LAST:event_btn_finalMouseExited
+
+    private void btn_finalMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_finalMouseClicked
+        //Registramos LOG de Cupom
+        Dao_Log registroLog = new Dao_Log();
+        Log log = new Log();
+        log.setLog(this.NotaRegistro);
+        log.setFK_Cliente(this.idCliente);
+        registroLog.Salvar(log);
+        //Registramos a Saída em todas as Reservas
+        Dao_Ocupacao registroOcupa = new Dao_Ocupacao();
+        Ocupacao ocupacao = new Ocupacao();
+        ocupacao.setCheckIn(registroPrimordial.getCheckIn());
+        ocupacao.setCheckOut(registroPrimordial.getCheckOut());
+        ocupacao.setFK_Cliente(registroPrimordial.getFK_Cliente());
+        ocupacao.setFK_Quarto(registroPrimordial.getFK_Quarto());
+        registroOcupa.salvarCheckOu(ocupacao);
+        //Voltamos a Tela Inicial
+        this.check = true;
+        this.dispose();
+    }//GEN-LAST:event_btn_finalMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

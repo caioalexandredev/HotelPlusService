@@ -1,7 +1,6 @@
 
 package Model;
 import Controller.Cliente;
-import Controller.Endereco;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.util.ArrayList;
@@ -40,7 +39,7 @@ public class Dao_Cliente extends Conexao {
             
             return true;
 
-        } catch (Exception ex) {
+        } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro interno: " + ex);
             //Se deu erro, retornando falso
             return false;
@@ -67,7 +66,7 @@ public class Dao_Cliente extends Conexao {
                 cliente.setNome(rs.getString("nome"));
                 lista.add(cliente);
             }
-        } catch (Exception ex){
+        } catch (SQLException ex){
             JOptionPane.showMessageDialog(null, "Erro interno: " + ex);
           }
         return lista;
@@ -96,7 +95,7 @@ public class Dao_Cliente extends Conexao {
                 cliente.setTelefone(rs.getString("telefone"));                
                 lista.add(cliente);
             }
-        } catch (Exception ex){
+        } catch (SQLException ex){
             JOptionPane.showMessageDialog(null, "Erro interno: " + ex);
           }
         return lista;

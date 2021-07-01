@@ -334,6 +334,13 @@ public class CheckOutFinal extends javax.swing.JFrame {
         modal.setModal(true);
         modal.setVisible(true);
         modal.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        if(modal.check){
+            JOptionPane.showMessageDialog(null, "Check-Out Realizado");
+            new Recepcao(user).setVisible(true);
+            this.dispose();
+        }else{
+            JOptionPane.showMessageDialog(null, "Nenhuma Ação Realizada, por favor finalize o Check-Out");
+        }
     }//GEN-LAST:event_btn_checkoutMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
