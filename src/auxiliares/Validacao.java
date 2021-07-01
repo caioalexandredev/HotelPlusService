@@ -1,6 +1,5 @@
 package auxiliares;
 
-import Controller.Ocupacao;
 import Model.Dao_Ocupacao;
 import Model.Dao_Usuario;
 import View.CheckIn;
@@ -8,7 +7,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.joda.time.DateTime;

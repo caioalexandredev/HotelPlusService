@@ -2,6 +2,7 @@
 package Model;
 
 import Controller.Endereco;
+import Controller.Ocupacao;
 import Controller.Quarto;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -85,6 +86,35 @@ public class Dao_Quarto extends Conexao{
             PreparedStatement pst = connection.prepareStatement(SQL);
             ResultSet rs = pst.executeQuery();
             
+            while (rs.next()) {
+                Quarto quarto = new Quarto();
+                
+                quarto.setId(rs.getInt("id"));
+                quarto.setNumeroQuarto(rs.getInt("numeroQuarto"));
+                quarto.setTipo(rs.getString("tipo"));
+                quarto.setPrecoDiaria(rs.getDouble("precoDiaria"));
+
+                listar.add(quarto);
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Erro: " + e);
+        }
+        return listar;
+    }
+    
+    public List<Quarto> buscarDisponivelEntreDadas(Ocupacao ocupacao) {
+        //Espaço para armazenar os dados
+        List<Quarto> listar = new ArrayList<>();
+        // Executa a SQL e captura o resultado da consulta
+        String SQL = "SELECT * FROM quarto q WHERE q.id NOT IN (SELECT `FK_Quarto` FROM `ocupacao` WHERE `check` = 0 and `reserva` BETWEEN ? AND ?)";
+        try {
+            PreparedStatement pst = connection.prepareStatement(SQL);
+            //Definição de valores da Query
+            pst.setDate(1, ocupacao.getCheckIn());
+            pst.setDate(2, ocupacao.getCheckOut());
+            //Executa a Query e armazena o resultado
+            ResultSet rs = pst.executeQuery();
+            // Cria um objeto para armazenar uma linha da consulta
             while (rs.next()) {
                 Quarto quarto = new Quarto();
                 

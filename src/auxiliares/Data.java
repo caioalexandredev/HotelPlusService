@@ -36,4 +36,22 @@ public class Data {
         cal.add(Calendar.DATE, 1);
         return new DateTime(cal);
     }
+    
+    public static boolean verificarSeUtrapassa(String data1, String data2) throws ParseException{
+        DateTime dataV1 = converterString(data1);
+        DateTime dataV2 = converterString(data2);
+        return dataV1.isAfter(dataV2);
+    }
+    
+    public static boolean verificarMesmoDia(String data1, String data2) throws ParseException{
+        DateTime dataV1 = converterString(data1);
+        DateTime dataV2 = converterString(data2);
+        return dataV1.isEqual(dataV2);
+    }
+    
+    public static boolean verificarSeUtrapassaHoje(String data1) throws ParseException{
+        DateTime dataV1 = converterString(data1);
+        DateTime dataV2 = agora();
+        return dataV1.isAfter(dataV2);
+    }
 }
