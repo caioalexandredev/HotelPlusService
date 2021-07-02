@@ -14,6 +14,7 @@ public class Usuario {
     private Endereco endereco;
     private String senha;
     private int nivel;
+    private int FK_Endereco;
     
     public void inserirDados(String nome, String email, String telefone, String cargo, String nascimento, String CPF, Endereco endereco) throws ParseException{
         this.nome = nome;
@@ -122,6 +123,14 @@ public class Usuario {
 
     public void setNivel(int nivel) {
         this.nivel = nivel;
+    }
+
+    public int getFK_Endereco() {
+        return FK_Endereco;
+    }
+
+    public void setFK_Endereco(int FK_Endereco) {
+        this.FK_Endereco = FK_Endereco;
     }
     
     

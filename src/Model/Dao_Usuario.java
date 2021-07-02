@@ -9,6 +9,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 public class Dao_Usuario {
@@ -142,5 +144,67 @@ public class Dao_Usuario {
             JOptionPane.showMessageDialog(null, "Erro: " + e);
         }
         return listar;
+    }
+    public boolean Atualizar(Usuario usuario) {
+        
+        String sql = "UPDATE usuario SET nome = ?, dataNasc = ?, cpf = ?, telefone = ?, email = ?, cargo = ?, remuneracao = ?, senha = ?, nivel = ?, FK_Endereco = ?  WHERE id = ?";
+        
+        PreparedStatement pst;
+        try{
+            
+            pst = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+
+            pst.setString(1, usuario.getNome());
+            pst.setDate(2, usuario.getNascimento());            
+            pst.setString(3, usuario.getCPF());
+            pst.setString(4, usuario.getTelefone());
+            pst.setString(5, usuario.getEmail());
+            pst.setString(6, usuario.getCargo());
+            pst.setDouble(7, usuario.getRemuneracao());
+            pst.setString(8, usuario.getSenha());
+            pst.setInt(9, usuario.getNivel());
+            pst.setInt(10, usuario.getFK_Endereco());
+            pst.setInt(11, usuario.getId());
+            
+            int affectedRows = pst.executeUpdate();
+
+            pst.close();
+
+            return affectedRows != 0;
+        }catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao Atualizar: " + ex);
+
+            return false;
+        }
+    }
+    public boolean Excluir(Usuario usuario){
+        
+        String deleteSQL = "DELETE FROM usuario nome = ?, dataNasc = ?, cpf = ?, telefone = ?, email = ?, cargo = ?, remuneracao = ?, senha = ?, nivel = ?, FK_Endereco = ?, WHERE id = ?";
+        
+        PreparedStatement pst;
+        try{
+            pst = connection.prepareStatement(deleteSQL);
+            
+            pst.setString(1, usuario.getNome());
+            pst.setDate(2, usuario.getNascimento());
+            pst.setString(3, usuario.getCPF());
+            pst.setString(4, usuario.getTelefone());
+            pst.setString(5, usuario.getEmail());
+            pst.setString(6, usuario.getCargo());
+            pst.setDouble(7, usuario.getRemuneracao());
+            pst.setString(8, usuario.getSenha());
+            pst.setInt(9, usuario.getNivel());
+            pst.setInt(10, usuario.getFK_Endereco());
+            pst.setInt(11, usuario.getId());
+            
+            int affectedRows = pst.executeUpdate();
+            pst.close();
+            return affectedRows != 0;            
+            
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao Deletar: " + ex);
+
+            return false;
+        }
     }
 }
