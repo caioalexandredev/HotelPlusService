@@ -30,6 +30,7 @@ public class Controle extends javax.swing.JFrame {
     Font cargo = null;
     Font desc = null;
     Usuario user;
+    boolean emSelecao = false;
     
     public Controle(Usuario user) {
         initComponents();
@@ -75,6 +76,39 @@ public class Controle extends javax.swing.JFrame {
     }
     
     private void atualizarlista(){
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null}
+            },
+            new String [] {
+                "ID", "Nome", "CPF", "Celular", "Email/Usuário", "Senha", "Cargo", "Nivel"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        
+        jTable1.getColumnModel().getColumn(0).setPreferredWidth(5);
+        jTable1.getColumnModel().getColumn(7).setPreferredWidth(5);
+        
         try {
             DefaultTableModel model =(DefaultTableModel) jTable1.getModel();
             model.getDataVector().clear();// limpa a tabela
@@ -83,7 +117,7 @@ public class Controle extends javax.swing.JFrame {
 
             if (!lista_pessoa.isEmpty()) {// aki verifica se a list nao esta vazia
                 for (Usuario c : lista_pessoa) {// aki ele percorre minha lista
-                    model.addRow(new Object[]{c.getId(), c.getNome(), c.getCPF(), c.getCargo(), c.getTelefone(), c.getNivel()});// adiciona na jtbale
+                    model.addRow(new Object[]{c.getId(), c.getNome(), c.getCPF(), c.getTelefone(), c.getEmail(), c.getSenha(), c.getCargo(), c.getNivel()});// adiciona na jtbale
                 }
             }else{
                 model.setNumRows(1);
@@ -92,6 +126,79 @@ public class Controle extends javax.swing.JFrame {
         catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Erro ao atualizar tabela\n" + e.getMessage(), null, JOptionPane.ERROR_MESSAGE);
         }
+    }
+    
+    private void atualizarlistaeditar(){
+        this.emSelecao = true;
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null}
+            },
+            new String [] {
+                "ID", "Nome", "CPF", "Celular", "Email/Usuário", "Senha", "Cargo", "Nivel"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, true, true, true, true, true, true, true
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        
+        jTable1.getColumnModel().getColumn(0).setPreferredWidth(5);
+        jTable1.getColumnModel().getColumn(7).setPreferredWidth(5);
+        
+        try {
+            DefaultTableModel model =(DefaultTableModel) jTable1.getModel();
+            model.getDataVector().clear();// limpa a tabela
+            Dao_Usuario listarc = new Dao_Usuario();
+            List<Usuario> lista_pessoa = listarc.buscarUnicaID(Integer.parseInt(txt_ocupacao.getText()));// aki é a pesquisa que popula meu list
+
+            if (!lista_pessoa.isEmpty()) {// aki verifica se a list nao esta vazia
+                for (Usuario c : lista_pessoa) {// aki ele percorre minha lista
+                    model.addRow(new Object[]{c.getId(), c.getNome(), c.getCPF(), c.getTelefone(), c.getEmail(), c.getSenha(), c.getCargo(), c.getNivel()});// adiciona na jtbale
+                }
+            }else{
+                model.setNumRows(1);
+            }
+        } 
+        catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Erro ao atualizar tabela\n" + e.getMessage(), null, JOptionPane.ERROR_MESSAGE);
+        }
+        
+        btn_editar.setEnabled(false);
+        btn_excluir.setEnabled(false);
+        btn_salvar.setEnabled(true);
+        JOptionPane.showMessageDialog(null, "Registro Selecionado, altere na tabela os dados que deseja alterar!");
+        
+    }
+    
+    private void realizarAlteracoes(){
+        System.out.println(txt_ocupacao.getText());
+        Usuario funcionario = new Dao_Usuario().buscarUnicaID(Integer.parseInt(txt_ocupacao.getText())).get(0);
+        funcionario.setNome(jTable1.getValueAt(0, 1).toString());
+        funcionario.setCPF(jTable1.getValueAt(0, 2).toString());
+        funcionario.setTelefone(jTable1.getValueAt(0, 3).toString());
+        funcionario.setEmail(jTable1.getValueAt(0, 4).toString());
+        funcionario.setSenha(jTable1.getValueAt(0, 5).toString());
+        funcionario.setCargo(jTable1.getValueAt(0, 6).toString());
+        funcionario.setNivel(Integer.parseInt(jTable1.getValueAt(0, 7).toString()));
+        new Dao_Usuario().Atualizar(funcionario);
     }
 
     /**
@@ -197,7 +304,6 @@ public class Controle extends javax.swing.JFrame {
         txt_ocupacao.setForeground(new java.awt.Color(83, 83, 83));
         txt_ocupacao.setBorder(null);
         txt_ocupacao.setEnabled(false);
-        txt_ocupacao.setOpaque(false);
         txt_ocupacao.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txt_ocupacaoActionPerformed(evt);
@@ -215,23 +321,23 @@ public class Controle extends javax.swing.JFrame {
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "ID", "Nome", "CPF", "Celular", "Cargo", "Nivel"
+                "ID", "Nome", "CPF", "Celular", "Email/Usuário", "Senha", "Cargo", "Nivel"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Integer.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false
+                false, false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -247,6 +353,12 @@ public class Controle extends javax.swing.JFrame {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jTable1MouseClicked(evt);
             }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jTable1MousePressed(evt);
+            }
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                jTable1MouseReleased(evt);
+            }
         });
         jScrollPane1.setViewportView(jTable1);
         if (jTable1.getColumnModel().getColumnCount() > 0) {
@@ -255,9 +367,10 @@ public class Controle extends javax.swing.JFrame {
             jTable1.getColumnModel().getColumn(1).setResizable(false);
             jTable1.getColumnModel().getColumn(2).setResizable(false);
             jTable1.getColumnModel().getColumn(3).setResizable(false);
-            jTable1.getColumnModel().getColumn(4).setResizable(false);
             jTable1.getColumnModel().getColumn(5).setResizable(false);
-            jTable1.getColumnModel().getColumn(5).setPreferredWidth(5);
+            jTable1.getColumnModel().getColumn(6).setResizable(false);
+            jTable1.getColumnModel().getColumn(7).setResizable(false);
+            jTable1.getColumnModel().getColumn(7).setPreferredWidth(5);
         }
 
         jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 180, 750, 140));
@@ -284,11 +397,15 @@ public class Controle extends javax.swing.JFrame {
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 btn_salvarMouseExited(evt);
             }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                btn_salvarMousePressed(evt);
+            }
         });
         jPanel1.add(btn_salvar, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 420, -1, -1));
 
         btn_excluir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/Excluir.png"))); // NOI18N
         btn_excluir.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btn_excluir.setEnabled(false);
         btn_excluir.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 btn_excluirMouseEntered(evt);
@@ -301,12 +418,16 @@ public class Controle extends javax.swing.JFrame {
 
         btn_editar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/Editar.png"))); // NOI18N
         btn_editar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btn_editar.setEnabled(false);
         btn_editar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 btn_editarMouseEntered(evt);
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 btn_editarMouseExited(evt);
+            }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                btn_editarMousePressed(evt);
             }
         });
         jPanel1.add(btn_editar, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 420, -1, -1));
@@ -320,6 +441,9 @@ public class Controle extends javax.swing.JFrame {
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 btn_cancelarMouseExited(evt);
+            }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                btn_cancelarMousePressed(evt);
             }
         });
         jPanel1.add(btn_cancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 420, -1, -1));
@@ -422,9 +546,81 @@ public class Controle extends javax.swing.JFrame {
             form_funcionario.setIcon( ii );
             txt_ocupacao.setText(jTable1.getValueAt(row, 0).toString());
             btn_novo.setEnabled(false);
+            btn_cancelar.setEnabled(true);
         }
     }//GEN-LAST:event_jTable1MouseClicked
 
+    private void jTable1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MousePressed
+        int row = jTable1.rowAtPoint(evt.getPoint());
+        int col = jTable1.columnAtPoint(evt.getPoint());
+        if (row >= 0 && col >= 0 && !this.emSelecao) {
+            ImageIcon ii = new ImageIcon(getClass().getResource("/assets/form_funcionario_B.png"));
+            form_funcionario.setIcon( ii );
+            txt_ocupacao.setText(jTable1.getValueAt(row, 0).toString());
+            btn_novo.setEnabled(false);
+            btn_cancelar.setEnabled(true);
+            btn_editar.setEnabled(true);
+            btn_excluir.setEnabled(true);
+        }
+    }//GEN-LAST:event_jTable1MousePressed
+
+    private void btn_cancelarMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_cancelarMousePressed
+        jTable1.getSelectionModel().clearSelection();
+        ImageIcon ii = new ImageIcon(getClass().getResource("/assets/form_funcionario_A.png"));
+        form_funcionario.setIcon( ii );
+        btn_novo.setEnabled(true);
+        btn_cancelar.setEnabled(false);
+        txt_ocupacao.setText("");
+        btn_editar.setEnabled(false);
+        btn_excluir.setEnabled(false);
+        this.emSelecao = false;
+        btn_salvar.setEnabled(false);
+        atualizarlista();
+    }//GEN-LAST:event_btn_cancelarMousePressed
+
+    private void jTable1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseReleased
+        System.out.println(jTable1.getSelectionModel().getSelectedItemsCount());
+        if(jTable1.getSelectionModel().getSelectedItemsCount() > 1){
+            JOptionPane.showMessageDialog(null, "Selecione apenas um registro");
+            jTable1.getSelectionModel().clearSelection();
+            ImageIcon ii = new ImageIcon(getClass().getResource("/assets/form_funcionario_A.png"));
+            form_funcionario.setIcon( ii );
+            btn_novo.setEnabled(true);
+            btn_cancelar.setEnabled(false);
+            txt_ocupacao.setText("");
+        }
+    }//GEN-LAST:event_jTable1MouseReleased
+
+    private void btn_editarMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_editarMousePressed
+        if(jTable1.getSelectionModel().getSelectedItemsCount() == 1){
+            jTable1.getSelectionModel().clearSelection();
+            atualizarlistaeditar();
+        }
+    }//GEN-LAST:event_btn_editarMousePressed
+
+    private void btn_salvarMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_salvarMousePressed
+        if(this.emSelecao){
+            Object[] options = { "Confirmar", "Cancelar" };
+            int opcao = JOptionPane.showOptionDialog(null, "Deseja prosseguir com o cadastro?\nLembre-se de apertar enter no campo alterado para confirmar a ação!","Confirmação", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+            
+            if(opcao == 0){
+                realizarAlteracoes();
+                jTable1.getSelectionModel().clearSelection();
+                ImageIcon ii = new ImageIcon(getClass().getResource("/assets/form_funcionario_A.png"));
+                form_funcionario.setIcon( ii );
+                btn_novo.setEnabled(true);
+                btn_cancelar.setEnabled(false);
+                txt_ocupacao.setText("");
+                btn_editar.setEnabled(false);
+                btn_excluir.setEnabled(false);
+                this.emSelecao = false;
+                btn_salvar.setEnabled(false);
+                atualizarlista();
+                JOptionPane.showMessageDialog(null, "Dados Atualizados com Sucesso!");
+            }
+        }
+    }//GEN-LAST:event_btn_salvarMousePressed
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel btn_cancelar;
     private javax.swing.JLabel btn_editar;

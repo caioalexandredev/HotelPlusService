@@ -260,8 +260,10 @@ public class TelaInicial extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_controleMousePressed
 
     private void btn_recepcaoMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_recepcaoMousePressed
-        new Recepcao(user).setVisible(true);
-        this.dispose();
+        if(user.getNivel() == 2 || user.getNivel() == 3){
+            new Recepcao(user).setVisible(true);
+            this.dispose();
+        }
     }//GEN-LAST:event_btn_recepcaoMousePressed
 
     private void btn_pontoMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_pontoMousePressed
