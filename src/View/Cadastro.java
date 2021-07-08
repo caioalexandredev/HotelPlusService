@@ -90,6 +90,7 @@ public class Cadastro extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Hotel Plus Service - Cadastro");
+        setIconImage(new javax.swing.ImageIcon(getClass().getResource("/assets/icon.png")).getImage());
         setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -101,7 +102,6 @@ public class Cadastro extends javax.swing.JFrame {
         } catch (java.text.ParseException ex) {
             ex.printStackTrace();
         }
-        txt_CPF.setOpaque(false);
         txt_CPF.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txt_CPFKeyTyped(evt);
@@ -117,7 +117,6 @@ public class Cadastro extends javax.swing.JFrame {
         } catch (java.text.ParseException ex) {
             ex.printStackTrace();
         }
-        txt_nascimento.setOpaque(false);
         txt_nascimento.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txt_nascimentoKeyTyped(evt);
@@ -153,7 +152,6 @@ public class Cadastro extends javax.swing.JFrame {
         txt_comp.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
         txt_comp.setForeground(new java.awt.Color(83, 83, 83));
         txt_comp.setBorder(null);
-        txt_comp.setOpaque(false);
         txt_comp.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txt_compActionPerformed(evt);
@@ -173,7 +171,6 @@ public class Cadastro extends javax.swing.JFrame {
         txt_numero.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
         txt_numero.setForeground(new java.awt.Color(83, 83, 83));
         txt_numero.setBorder(null);
-        txt_numero.setOpaque(false);
         txt_numero.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txt_numeroActionPerformed(evt);
@@ -193,7 +190,6 @@ public class Cadastro extends javax.swing.JFrame {
         txt_estado.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
         txt_estado.setForeground(new java.awt.Color(83, 83, 83));
         txt_estado.setBorder(null);
-        txt_estado.setOpaque(false);
         txt_estado.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txt_estadoActionPerformed(evt);
@@ -213,7 +209,6 @@ public class Cadastro extends javax.swing.JFrame {
         txt_cidade.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
         txt_cidade.setForeground(new java.awt.Color(83, 83, 83));
         txt_cidade.setBorder(null);
-        txt_cidade.setOpaque(false);
         txt_cidade.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txt_cidadeActionPerformed(evt);
@@ -233,7 +228,6 @@ public class Cadastro extends javax.swing.JFrame {
         txt_bairro.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
         txt_bairro.setForeground(new java.awt.Color(83, 83, 83));
         txt_bairro.setBorder(null);
-        txt_bairro.setOpaque(false);
         txt_bairro.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txt_bairroActionPerformed(evt);
@@ -253,7 +247,6 @@ public class Cadastro extends javax.swing.JFrame {
         txt_rua.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
         txt_rua.setForeground(new java.awt.Color(83, 83, 83));
         txt_rua.setBorder(null);
-        txt_rua.setOpaque(false);
         txt_rua.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txt_ruaActionPerformed(evt);
@@ -279,7 +272,6 @@ public class Cadastro extends javax.swing.JFrame {
         txt_cargo.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
         txt_cargo.setForeground(new java.awt.Color(83, 83, 83));
         txt_cargo.setBorder(null);
-        txt_cargo.setOpaque(false);
         txt_cargo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txt_cargoActionPerformed(evt);
@@ -303,7 +295,6 @@ public class Cadastro extends javax.swing.JFrame {
         } catch (java.text.ParseException ex) {
             ex.printStackTrace();
         }
-        txt_celular.setOpaque(false);
         getContentPane().add(txt_celular, new org.netbeans.lib.awtextra.AbsoluteConstraints(555, 160, 180, 30));
 
         form_Celular.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/form_Cel_B.png"))); // NOI18N
@@ -313,7 +304,6 @@ public class Cadastro extends javax.swing.JFrame {
         txt_nome.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
         txt_nome.setForeground(new java.awt.Color(83, 83, 83));
         txt_nome.setBorder(null);
-        txt_nome.setOpaque(false);
         txt_nome.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txt_nomeActionPerformed(evt);
@@ -333,7 +323,6 @@ public class Cadastro extends javax.swing.JFrame {
         txt_email.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
         txt_email.setForeground(new java.awt.Color(83, 83, 83));
         txt_email.setBorder(null);
-        txt_email.setOpaque(false);
         txt_email.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txt_emailActionPerformed(evt);

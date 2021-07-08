@@ -68,12 +68,12 @@ public class Login extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Hotel Plus Service - Login");
+        setIconImage(new javax.swing.ImageIcon(getClass().getResource("/assets/icon.png")).getImage());
         setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         txt_password.setBackground(new java.awt.Color(255, 255, 255, 0));
         txt_password.setBorder(null);
-        txt_password.setOpaque(false);
         txt_password.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 txt_passwordKeyPressed(evt);
@@ -88,7 +88,6 @@ public class Login extends javax.swing.JFrame {
         txt_login.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
         txt_login.setForeground(new java.awt.Color(83, 83, 83));
         txt_login.setBorder(null);
-        txt_login.setOpaque(false);
         txt_login.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 txt_loginKeyPressed(evt);
