@@ -214,7 +214,6 @@ public class Controle extends javax.swing.JFrame {
         jLabel_Rodape1 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
-        btn_regproduto = new javax.swing.JLabel();
         jLabel_Titulo2 = new javax.swing.JLabel();
         jLabel_Titulo1 = new javax.swing.JLabel();
         jLabel_Cargo = new javax.swing.JLabel();
@@ -250,18 +249,6 @@ public class Controle extends javax.swing.JFrame {
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        btn_regproduto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/btn_regprot_A.png"))); // NOI18N
-        btn_regproduto.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btn_regproduto.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                btn_regprodutoMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                btn_regprodutoMouseExited(evt);
-            }
-        });
-        jPanel1.add(btn_regproduto, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 420, -1, -1));
 
         jLabel_Titulo2.setForeground(new java.awt.Color(140, 140, 140));
         jLabel_Titulo2.setText("Funcionários e Gerencia");
@@ -414,6 +401,9 @@ public class Controle extends javax.swing.JFrame {
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 btn_excluirMouseExited(evt);
             }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                btn_excluirMousePressed(evt);
+            }
         });
         jPanel1.add(btn_excluir, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 420, -1, -1));
 
@@ -473,16 +463,6 @@ public class Controle extends javax.swing.JFrame {
         ImageIcon ii = new ImageIcon(getClass().getResource("/assets/form_funcionario_B.png"));
         form_funcionario.setIcon( ii );
     }//GEN-LAST:event_txt_ocupacaoKeyPressed
-
-    private void btn_regprodutoMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_regprodutoMouseEntered
-        ImageIcon ii = new ImageIcon(getClass().getResource("/assets/btn_regprot_B.png"));
-        btn_regproduto.setIcon( ii );
-    }//GEN-LAST:event_btn_regprodutoMouseEntered
-
-    private void btn_regprodutoMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_regprodutoMouseExited
-        ImageIcon ii = new ImageIcon(getClass().getResource("/assets/btn_regprot_A.png"));
-        btn_regproduto.setIcon( ii );
-    }//GEN-LAST:event_btn_regprodutoMouseExited
 
     private void btn_novoMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_novoMouseEntered
        ImageIcon ii = new ImageIcon(getClass().getResource("/assets/Novo_.png"));
@@ -621,6 +601,40 @@ public class Controle extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_btn_salvarMousePressed
+
+    private void btn_excluirMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_excluirMousePressed
+        if(!this.emSelecao && !txt_ocupacao.getText().equals("")){
+            if(Integer.parseInt(txt_ocupacao.getText()) == this.user.getId()){
+                JOptionPane.showMessageDialog(null, "Um usuário não pode excluir a si mesmo!");
+            }else if(new Dao_Usuario().buscarUnicaNivel(3).size() < 1){
+                JOptionPane.showMessageDialog(null, "Deve conter 1 usuário adminstrador");
+            }else{
+                Usuario userManipulado = new Dao_Usuario().buscarUnicaID(Integer.parseInt(txt_ocupacao.getText())).get(0);
+                Object[] options = { "Confirmar", "Cancelar" };
+                int opcao = JOptionPane.showOptionDialog(null, "Deseja mesmo excluir o usuário: " + userManipulado.getNome() + "\nDe CPF número: " + userManipulado.getCPF(),"Confirmação", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+                
+                if(opcao == 0){
+                    if(new Dao_Usuario().Excluir(userManipulado)){
+                        JOptionPane.showMessageDialog(null, "Usuário excluido com sucesso!");
+                    }else{
+                        JOptionPane.showMessageDialog(null, "Aconteceu um erro, contate a equipe tecnica de suporte!");
+                    }
+                }
+                
+                jTable1.getSelectionModel().clearSelection();
+                ImageIcon ii = new ImageIcon(getClass().getResource("/assets/form_funcionario_A.png"));
+                form_funcionario.setIcon( ii );
+                btn_novo.setEnabled(true);
+                btn_cancelar.setEnabled(false);
+                txt_ocupacao.setText("");
+                btn_editar.setEnabled(false);
+                btn_excluir.setEnabled(false);
+                this.emSelecao = false;
+                btn_salvar.setEnabled(false);
+                atualizarlista();
+            }
+        }
+    }//GEN-LAST:event_btn_excluirMousePressed
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel btn_cancelar;
@@ -628,7 +642,6 @@ public class Controle extends javax.swing.JFrame {
     private javax.swing.JLabel btn_excluir;
     private javax.swing.JLabel btn_main;
     private javax.swing.JLabel btn_novo;
-    private javax.swing.JLabel btn_regproduto;
     private javax.swing.JLabel btn_salvar;
     private javax.swing.JLabel form_funcionario;
     private javax.swing.JLabel jLabel1;

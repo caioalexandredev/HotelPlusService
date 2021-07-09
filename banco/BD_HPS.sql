@@ -139,3 +139,17 @@ INSERT INTO `produtos` (`id`, `nome`, `preco`) VALUES (NULL, 'Achocolatado', '6.
 INSERT INTO `produtos` (`id`, `nome`, `preco`) VALUES (NULL, 'Castanha de Caju', '7.50');
 INSERT INTO `produtos` (`id`, `nome`, `preco`) VALUES (NULL, 'Chocolate/barrinha', '7.50');
 INSERT INTO `produtos` (`id`, `nome`, `preco`) VALUES (NULL, 'Cereais em Barrinha', '5.00');
+
+-- TRIGGERS
+
+DELIMITER $
+
+CREATE TRIGGER Tgr_Usuario_Drop BEFORE DELETE
+ON usuario
+FOR EACH ROW
+BEGIN
+	DELETE FROM ponto WHERE FK_Usuario = OLD.id;
+	DELETE FROM log WHERE FK_Usuario = OLD.id;
+END$
+
+DELIMITER ;
