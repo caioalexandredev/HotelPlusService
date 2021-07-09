@@ -229,6 +229,7 @@ public class Controle extends javax.swing.JFrame {
         btn_excluir = new javax.swing.JLabel();
         btn_editar = new javax.swing.JLabel();
         btn_cancelar = new javax.swing.JLabel();
+        btn_vizualizar = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Hotel Plus Service - Controle Administrativo");
@@ -372,6 +373,9 @@ public class Controle extends javax.swing.JFrame {
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 btn_novoMouseExited(evt);
             }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                btn_novoMousePressed(evt);
+            }
         });
         jPanel1.add(btn_novo, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 420, -1, -1));
 
@@ -438,6 +442,18 @@ public class Controle extends javax.swing.JFrame {
             }
         });
         jPanel1.add(btn_cancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 420, -1, -1));
+
+        btn_vizualizar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/btn_visualizao_usuario_A.png"))); // NOI18N
+        btn_vizualizar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btn_vizualizar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btn_vizualizarMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btn_vizualizarMouseExited(evt);
+            }
+        });
+        jPanel1.add(btn_vizualizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(685, 358, -1, -1));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 860, 520));
 
@@ -635,6 +651,24 @@ public class Controle extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_btn_excluirMousePressed
+
+    private void btn_vizualizarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_vizualizarMouseEntered
+        ImageIcon ii = new ImageIcon(getClass().getResource("/assets/btn_visualizao_usuario_B.png"));
+        btn_vizualizar.setIcon( ii );
+    }//GEN-LAST:event_btn_vizualizarMouseEntered
+
+    private void btn_vizualizarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_vizualizarMouseExited
+        ImageIcon ii = new ImageIcon(getClass().getResource("/assets/btn_visualizao_usuario_A.png"));
+        btn_vizualizar.setIcon( ii );
+    }//GEN-LAST:event_btn_vizualizarMouseExited
+
+    private void btn_novoMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_novoMousePressed
+        CadastroViaAdm modal = new CadastroViaAdm();
+        modal.setModal(true);
+        modal.setVisible(true);
+        modal.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        this.atualizarlista();
+    }//GEN-LAST:event_btn_novoMousePressed
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel btn_cancelar;
@@ -643,6 +677,7 @@ public class Controle extends javax.swing.JFrame {
     private javax.swing.JLabel btn_main;
     private javax.swing.JLabel btn_novo;
     private javax.swing.JLabel btn_salvar;
+    private javax.swing.JLabel btn_vizualizar;
     private javax.swing.JLabel form_funcionario;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel_Cargo;
