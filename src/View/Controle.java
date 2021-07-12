@@ -605,6 +605,11 @@ public class Controle extends javax.swing.JFrame {
             btn_novo.setEnabled(true);
             btn_cancelar.setEnabled(false);
             txt_ocupacao.setText("");
+            btn_editar.setEnabled(false);
+            btn_excluir.setEnabled(false);
+            this.emSelecao = false;
+            btn_salvar.setEnabled(false);
+            atualizarlista();
         }
     }//GEN-LAST:event_jTable1MouseReleased
 

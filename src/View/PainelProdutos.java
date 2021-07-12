@@ -233,6 +233,7 @@ public class PainelProdutos extends javax.swing.JFrame {
 
         txt_registrar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/btn_produto_reg_A.png"))); // NOI18N
         txt_registrar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        txt_registrar.setEnabled(false);
         txt_registrar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 txt_registrarMouseEntered(evt);
