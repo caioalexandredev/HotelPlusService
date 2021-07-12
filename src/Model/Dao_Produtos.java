@@ -1,9 +1,11 @@
 package Model;
 
 import Controller.Produtos;
+import Controller.Usuario;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -100,5 +102,25 @@ public class Dao_Produtos extends Conexao{
             JOptionPane.showMessageDialog(null, "Erro interno: " + e);
         }
         return listar;
+    }
+    
+    public boolean Excluir(int id){
+        
+        String deleteSQL = "DELETE FROM produtos WHERE id = ?";
+        
+        PreparedStatement pst;
+        try{
+            pst = connection.prepareStatement(deleteSQL);
+            
+            pst.setInt(1, id);
+            int affectedRows = pst.executeUpdate();
+            pst.close();
+            return affectedRows != 0;            
+            
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao Deletar: " + ex);
+
+            return false;
+        }
     }
 }

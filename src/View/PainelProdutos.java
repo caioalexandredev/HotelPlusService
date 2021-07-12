@@ -5,9 +5,12 @@
  */
 package View;
 
+import Controller.Endereco;
 import Controller.Produtos;
 import Controller.Usuario;
+import Model.Dao_Endereco;
 import Model.Dao_Produtos;
+import Model.Dao_Usuario;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.GraphicsEnvironment;
@@ -151,6 +154,9 @@ public class PainelProdutos extends javax.swing.JFrame {
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 txt_excluirMouseExited(evt);
             }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                txt_excluirMousePressed(evt);
+            }
         });
         jPanel1.add(txt_excluir, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 390, -1, -1));
 
@@ -277,6 +283,27 @@ public class PainelProdutos extends javax.swing.JFrame {
         ImageIcon ii = new ImageIcon(getClass().getResource("/assets/btn_produto_reg_A.png"));
         txt_registrar.setIcon( ii );
     }//GEN-LAST:event_txt_registrarMouseExited
+
+    private void txt_excluirMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txt_excluirMousePressed
+        String input = JOptionPane.showInputDialog(null,"Identificação do Produto");
+        if(input != null && !input.equals("") && input.matches("[0-9]+")){
+            int valor = Integer.parseInt(input);
+            Dao_Produtos busca = new Dao_Produtos();
+            if(!busca.buscarViaID(valor).isEmpty()){
+                Object[] options = { "Confirmar", "Cancelar" };
+                int opcao = JOptionPane.showOptionDialog(null, "Deseja mesmo excluir este produto?","Confirmação", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+                if(opcao == 0){
+                    busca.Excluir(valor);
+                    JOptionPane.showMessageDialog(null, "Excluido com Sucesso!");
+                    this.atualizarlista();
+                }
+            }else{
+                JOptionPane.showMessageDialog(null, "Produto Inexistente!");
+            }
+        }else{
+            JOptionPane.showMessageDialog(null, "Digite um valor válido!");
+        }
+    }//GEN-LAST:event_txt_excluirMousePressed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel btn_main;
