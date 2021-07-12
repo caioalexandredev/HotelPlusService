@@ -44,6 +44,29 @@ public class Dao_Ocupacao extends Conexao {
         }
     }
     
+    public boolean salvarReserva(Ocupacao ocupacao){
+        String sql = "INSERT INTO `ocupacao` (`id`, `check-in`, `check-out`, `reserva`, `check`, `FK_Cliente`, `FK_Quarto`) VALUES (NULL, ?, ?, ?, ?, ?, ?)";
+        PreparedStatement pst;
+        
+        try {
+            pst = connection.prepareStatement(sql);
+   
+            pst.setDate(1, ocupacao.getCheckIn());
+            pst.setDate(2, ocupacao.getCheckOut());
+            pst.setDate(3, ocupacao.getReserva());
+            pst.setBoolean(4, ocupacao.isCheck());
+            pst.setInt(5, ocupacao.getFK_Cliente());
+            pst.setInt(6, ocupacao.getFK_Quarto());
+
+            pst.executeUpdate();
+            pst.close();
+            return true;
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro interno: " + ex);
+            return false;
+        }
+    }
+    
     public boolean salvarCheckOu(Ocupacao ocupacao){
         String sql = "UPDATE `ocupacao` SET `check`= 1 WHERE `check-in` = ? AND `check-out` = ? AND `FK_Cliente` = ? AND `FK_Quarto` = ?;";
         PreparedStatement pst;

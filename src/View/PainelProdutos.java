@@ -11,7 +11,6 @@ import Model.Dao_Produtos;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.GraphicsEnvironment;
-import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.List;
 import javax.swing.ImageIcon;
@@ -22,7 +21,7 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author DESENVOLVIMENTO
  */
-public class CheckOutFinal extends javax.swing.JFrame {
+public class PainelProdutos extends javax.swing.JFrame {
 
     Font roboto = null;
     Font robotoB = null;
@@ -36,7 +35,7 @@ public class CheckOutFinal extends javax.swing.JFrame {
     int ocupacao;
     String textoNotaProdutos = "";
     
-    public CheckOutFinal(Usuario user, int Ocupacao) {
+    public PainelProdutos(Usuario user) {
         initComponents();
         
         try{
@@ -71,31 +70,12 @@ public class CheckOutFinal extends javax.swing.JFrame {
         this.user = user;
         definirDadosEmTela();
         
-        txt_nota.setText("Produtos Consumidos\n=================\n");
         atualizarlista();
-        
-        this.ocupacao = Ocupacao;
     }
     
     private void definirDadosEmTela(){
         jLabel_Nome.setText(this.user.getNome());
         jLabel_Cargo.setText("Cargo: " + this.user.getCargo());
-    }
-    
-    private void adicionarItem(int id){
-        String topo = "Produtos Consumidos\n=================\n\n";
-        
-        Dao_Produtos produtoNovo = new Dao_Produtos();
-        List<Produtos> listar = produtoNovo.buscarViaID(id);
-        if(listar.isEmpty()){
-            JOptionPane.showMessageDialog(null, "Nenhum produto encontrado!");
-        }else{
-            this.precoFinalProdutos += listar.get(0).getPreco();
-            txt_produtos.setText("");
-            this.produtosExibidos += listar.get(0).getNome() + "______R$" + listar.get(0).getPreco() + "\n";
-            txt_nota.setText(topo + this.produtosExibidos + "\n=================\nTotal: R$" + this.precoFinalProdutos);
-            textoNotaProdutos = topo + this.produtosExibidos + "\n=================\nValor Total de produtos: R$" + this.precoFinalProdutos + "\n";
-        }
     }
     
     private void atualizarlista(){
@@ -131,20 +111,16 @@ public class CheckOutFinal extends javax.swing.JFrame {
         jLabel_Rodape1 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
-        btn_checkout = new javax.swing.JLabel();
+        txt_excluir = new javax.swing.JLabel();
         jLabel_Titulo2 = new javax.swing.JLabel();
         jLabel_Titulo1 = new javax.swing.JLabel();
         jLabel_Cargo = new javax.swing.JLabel();
         jLabel_Nome = new javax.swing.JLabel();
         jLabel_Desc = new javax.swing.JLabel();
         btn_main = new javax.swing.JLabel();
-        txt_produtos = new javax.swing.JTextField();
-        form_produto = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        txt_nota = new javax.swing.JTextPane();
-        jLabel2 = new javax.swing.JLabel();
+        txt_registrar = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Hotel Plus Service - Check-Out Finalização");
@@ -166,23 +142,20 @@ public class CheckOutFinal extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        btn_checkout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/btn_checkout_A.png"))); // NOI18N
-        btn_checkout.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btn_checkout.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btn_checkoutMouseClicked(evt);
-            }
+        txt_excluir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/btn_produto_exc_A.png"))); // NOI18N
+        txt_excluir.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        txt_excluir.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                btn_checkoutMouseEntered(evt);
+                txt_excluirMouseEntered(evt);
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                btn_checkoutMouseExited(evt);
+                txt_excluirMouseExited(evt);
             }
         });
-        jPanel1.add(btn_checkout, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 417, -1, -1));
+        jPanel1.add(txt_excluir, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 390, -1, -1));
 
         jLabel_Titulo2.setForeground(new java.awt.Color(140, 140, 140));
-        jLabel_Titulo2.setText("Consumidos do Frigobar");
+        jLabel_Titulo2.setText("do Frigobar (Padrão a Todos)");
         jPanel1.add(jLabel_Titulo2, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 70, -1, -1));
 
         jLabel_Titulo1.setForeground(new java.awt.Color(140, 140, 140));
@@ -218,25 +191,6 @@ public class CheckOutFinal extends javax.swing.JFrame {
         });
         jPanel1.add(btn_main, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 50, -1, -1));
 
-        txt_produtos.setBackground(new java.awt.Color(255, 255, 255, 0));
-        txt_produtos.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
-        txt_produtos.setForeground(new java.awt.Color(83, 83, 83));
-        txt_produtos.setBorder(null);
-        txt_produtos.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txt_produtosActionPerformed(evt);
-            }
-        });
-        txt_produtos.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                txt_produtosKeyPressed(evt);
-            }
-        });
-        jPanel1.add(txt_produtos, new org.netbeans.lib.awtextra.AbsoluteConstraints(155, 420, 180, 30));
-
-        form_produto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/btn_produtos_A.png"))); // NOI18N
-        jPanel1.add(form_produto, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 400, -1, -1));
-
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null},
@@ -269,19 +223,19 @@ public class CheckOutFinal extends javax.swing.JFrame {
             jTable1.getColumnModel().getColumn(2).setPreferredWidth(5);
         }
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 190, 330, 170));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(215, 190, 420, 170));
 
-        txt_nota.setEditable(false);
-        txt_nota.setBackground(new java.awt.Color(255, 255, 102));
-        jScrollPane2.setViewportView(txt_nota);
-
-        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 190, 200, 170));
-
-        jLabel2.setBackground(new java.awt.Color(74, 0, 224));
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(74, 0, 224));
-        jLabel2.setText("Pressione Enter para adicionar o produto");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 460, -1, -1));
+        txt_registrar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/btn_produto_reg_A.png"))); // NOI18N
+        txt_registrar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        txt_registrar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                txt_registrarMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                txt_registrarMouseExited(evt);
+            }
+        });
+        jPanel1.add(txt_registrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 390, -1, -1));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 860, 520));
 
@@ -299,54 +253,34 @@ public class CheckOutFinal extends javax.swing.JFrame {
         btn_main.setIcon( ii );
     }//GEN-LAST:event_btn_mainMouseExited
 
-    private void txt_produtosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_produtosActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txt_produtosActionPerformed
-
-    private void txt_produtosKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_produtosKeyPressed
-        ImageIcon ii = new ImageIcon(getClass().getResource("/assets/btn_produtos_B.png"));
-        form_produto.setIcon( ii );
-        
-        if(evt.getKeyCode() == KeyEvent.VK_ENTER){
-            this.adicionarItem(Integer.parseInt(txt_produtos.getText()));
-        }
-    }//GEN-LAST:event_txt_produtosKeyPressed
-
-    private void btn_checkoutMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_checkoutMouseEntered
-        ImageIcon ii = new ImageIcon(getClass().getResource("/assets/btn_checkout_B.png"));
-        btn_checkout.setIcon( ii );
-    }//GEN-LAST:event_btn_checkoutMouseEntered
-
-    private void btn_checkoutMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_checkoutMouseExited
-        ImageIcon ii = new ImageIcon(getClass().getResource("/assets/btn_checkout_A.png"));
-        btn_checkout.setIcon( ii );
-    }//GEN-LAST:event_btn_checkoutMouseExited
-
     private void btn_mainMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_mainMouseClicked
         new Recepcao(user).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btn_mainMouseClicked
 
-    private void btn_checkoutMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_checkoutMouseClicked
-        CheckOutFinalConfirm modal = new CheckOutFinalConfirm(textoNotaProdutos, this.precoFinalProdutos, this.ocupacao);
-        modal.setModal(true);
-        modal.setVisible(true);
-        modal.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        if(modal.check){
-            JOptionPane.showMessageDialog(null, "Check-Out Realizado");
-            new Recepcao(user).setVisible(true);
-            this.dispose();
-        }else{
-            JOptionPane.showMessageDialog(null, "Nenhuma Ação Realizada, por favor finalize o Check-Out");
-        }
-    }//GEN-LAST:event_btn_checkoutMouseClicked
+    private void txt_excluirMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txt_excluirMouseEntered
+        ImageIcon ii = new ImageIcon(getClass().getResource("/assets/btn_produto_exc_B.png"));
+        txt_excluir.setIcon( ii );
+    }//GEN-LAST:event_txt_excluirMouseEntered
+
+    private void txt_excluirMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txt_excluirMouseExited
+        ImageIcon ii = new ImageIcon(getClass().getResource("/assets/btn_produto_exc_A.png"));
+        txt_excluir.setIcon( ii );
+    }//GEN-LAST:event_txt_excluirMouseExited
+
+    private void txt_registrarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txt_registrarMouseEntered
+        ImageIcon ii = new ImageIcon(getClass().getResource("/assets/btn_produto_reg_B.png"));
+        txt_registrar.setIcon( ii );
+    }//GEN-LAST:event_txt_registrarMouseEntered
+
+    private void txt_registrarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txt_registrarMouseExited
+        ImageIcon ii = new ImageIcon(getClass().getResource("/assets/btn_produto_reg_A.png"));
+        txt_registrar.setIcon( ii );
+    }//GEN-LAST:event_txt_registrarMouseExited
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel btn_checkout;
     private javax.swing.JLabel btn_main;
-    private javax.swing.JLabel form_produto;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel_Cargo;
     private javax.swing.JLabel jLabel_Desc;
     private javax.swing.JLabel jLabel_Nome;
@@ -356,9 +290,8 @@ public class CheckOutFinal extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel_Titulo2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTextPane txt_nota;
-    private javax.swing.JTextField txt_produtos;
+    private javax.swing.JLabel txt_excluir;
+    private javax.swing.JLabel txt_registrar;
     // End of variables declaration//GEN-END:variables
 }

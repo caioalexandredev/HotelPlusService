@@ -13,7 +13,6 @@ import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.GraphicsEnvironment;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
@@ -231,6 +230,7 @@ public class Controle extends javax.swing.JFrame {
         btn_excluir = new javax.swing.JLabel();
         btn_editar = new javax.swing.JLabel();
         btn_cancelar = new javax.swing.JLabel();
+        btn_produtos = new javax.swing.JLabel();
         btn_vizualizar = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -444,6 +444,21 @@ public class Controle extends javax.swing.JFrame {
             }
         });
         jPanel1.add(btn_cancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 420, -1, -1));
+
+        btn_produtos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/btn_produtos_usuario_A.png"))); // NOI18N
+        btn_produtos.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btn_produtos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btn_produtosMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btn_produtosMouseExited(evt);
+            }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                btn_produtosMousePressed(evt);
+            }
+        });
+        jPanel1.add(btn_produtos, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 358, -1, -1));
 
         btn_vizualizar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/btn_visualizao_usuario_A.png"))); // NOI18N
         btn_vizualizar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -689,8 +704,22 @@ public class Controle extends javax.swing.JFrame {
         }else{
             JOptionPane.showMessageDialog(null, "Digite um valor válido!");
         }
-        
     }//GEN-LAST:event_btn_vizualizarMousePressed
+
+    private void btn_produtosMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_produtosMouseEntered
+        ImageIcon ii = new ImageIcon(getClass().getResource("/assets/btn_produtos_usuario_B.png"));
+        btn_produtos.setIcon( ii );
+    }//GEN-LAST:event_btn_produtosMouseEntered
+
+    private void btn_produtosMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_produtosMouseExited
+        ImageIcon ii = new ImageIcon(getClass().getResource("/assets/btn_produtos_usuario_A.png"));
+        btn_produtos.setIcon( ii );
+    }//GEN-LAST:event_btn_produtosMouseExited
+
+    private void btn_produtosMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_produtosMousePressed
+        new PainelProdutos(this.user).setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btn_produtosMousePressed
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel btn_cancelar;
@@ -698,6 +727,7 @@ public class Controle extends javax.swing.JFrame {
     private javax.swing.JLabel btn_excluir;
     private javax.swing.JLabel btn_main;
     private javax.swing.JLabel btn_novo;
+    private javax.swing.JLabel btn_produtos;
     private javax.swing.JLabel btn_salvar;
     private javax.swing.JLabel btn_vizualizar;
     private javax.swing.JLabel form_funcionario;

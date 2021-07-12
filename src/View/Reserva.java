@@ -560,7 +560,38 @@ public class Reserva extends javax.swing.JFrame {
             Object[] options = { "Confirmar", "Cancelar" };
             int opcao = JOptionPane.showOptionDialog(null, "Reserva a ser marcada, deseja confirmar?","Confirmação", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
             if(opcao == 0){
-                
+                try {
+                    //Capturamos a data de Entrada
+                    DateTime entrada = auxiliares.Data.converterString(txt_data_entrada.getText());
+                    //Capturamos a Data de Saida
+                    DateTime saida = auxiliares.Data.converterString(txt_data_saida.getText());
+                    //Calculamos quantos dias de Reservas serão feitos
+                    int DiasReservas = Days.daysBetween(entrada, saida).getDays() + 1;
+                    //Variavel de Data Pecorrida
+                    DateTime pecorrido = entrada;
+                    //Configuramos a Reserva
+                    Ocupacao reservamax = new Ocupacao();
+                    reservamax.setCheckIn(new java.sql.Date(entrada.toDate().getTime()));
+                    reservamax.setCheckOut(new java.sql.Date(saida.toDate().getTime()));
+                    reservamax.setFK_Cliente(Integer.parseInt(this.IDCliente));
+                    reservamax.setFK_Quarto(Integer.parseInt(this.IDQuarto));
+                    reservamax.setCheck(false);
+                    //Fazemos Laço Pecorrendo Cada Data
+                    for(int i = 0; i < DiasReservas; i++){
+                        //Registramos a Reserva do dia em uma Ocupação Propria
+                        reservamax.setReserva(new java.sql.Date(pecorrido.toDate().getTime()));
+                        Dao_Ocupacao ocupa = new Dao_Ocupacao();
+                        ocupa.salvarReserva(reservamax);
+                        //Pecorre o dia para o proximo laço
+                        pecorrido = auxiliares.Data.avancardia(pecorrido);
+                    }
+                    //Informamos o Registro e Finalizamos a Sessão
+                    JOptionPane.showMessageDialog(null, "Reserva do hóspede " + txt_cliente.getText() + " Feito");
+                    new Recepcao(user).setVisible(true);
+                    this.dispose();
+                }catch (Exception e) {
+                    JOptionPane.showMessageDialog(null, "Erro ao atualizar tabela\n" + e.getMessage(), null, JOptionPane.ERROR_MESSAGE);
+                }
             }
         }
     }//GEN-LAST:event_btn_registroMouseClicked
