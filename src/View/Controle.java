@@ -5,7 +5,9 @@
  */
 package View;
 
+import Controller.Endereco;
 import Controller.Usuario;
+import Model.Dao_Endereco;
 import Model.Dao_Usuario;
 import java.awt.Font;
 import java.awt.FontFormatException;
@@ -452,6 +454,9 @@ public class Controle extends javax.swing.JFrame {
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 btn_vizualizarMouseExited(evt);
             }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                btn_vizualizarMousePressed(evt);
+            }
         });
         jPanel1.add(btn_vizualizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(685, 358, -1, -1));
 
@@ -669,6 +674,23 @@ public class Controle extends javax.swing.JFrame {
         modal.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.atualizarlista();
     }//GEN-LAST:event_btn_novoMousePressed
+
+    private void btn_vizualizarMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_vizualizarMousePressed
+        String input = JOptionPane.showInputDialog(null,"Identificação do Funcionário");
+        if(input != null && !input.equals("") && input.matches("[0-9]+")){
+            int valor = Integer.parseInt(input);
+            Dao_Usuario busca = new Dao_Usuario();
+            if(!busca.buscarUnicaID(valor).isEmpty()){
+                Endereco Endereco = new Dao_Endereco().buscarUnicaID(valor).get(0);
+                new DadosUsuario(this, true, busca.buscarUnicaID(valor).get(0), Endereco).setVisible(true);
+            }else{
+                JOptionPane.showMessageDialog(null, "Usuário Inexistente!");
+            }
+        }else{
+            JOptionPane.showMessageDialog(null, "Digite um valor válido!");
+        }
+        
+    }//GEN-LAST:event_btn_vizualizarMousePressed
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel btn_cancelar;
